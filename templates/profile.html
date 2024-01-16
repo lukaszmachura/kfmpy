@@ -1,0 +1,32 @@
+<!-- profile.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <h2>User Profile - {{ user.username }}</h2>
+
+    <dl class="row">
+        <dt class="col-sm-3">Zawodnik:</dt>
+        <dd class="col-sm-9">{{ user.username }}</dd>
+        {% if user.kendo %}
+            <dt class="col-sm-3">Kendo:</dt>
+            <dd class="col-sm-9">{{ user.kendo }}</dd>
+        {% endif %}
+        {% if user.iaido %}
+            <dt class="col-sm-3">Iaido:</dt>
+            <dd class="col-sm-9">{{ user.iaido }}</dd>
+        {% endif %}
+        {% if user.jodo %}
+            <dt class="col-sm-3">Jodo:</dt>
+            <dd class="col-sm-9">{{ user.jodo }}</dd>
+        {% endif %}
+        
+        <dt class="col-sm-3">Klub:</dt>
+        <dd class="col-sm-9">{{ club.name }}</dd>
+
+        <dt class="col-sm-3">Maisto:</dt>
+        <dd class="col-sm-9">{{ club.city }}</dd>
+    </dl>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Rejestracja{% endblock %}
+
+{% block content %}
+  <h2>Rejestracja konta</h2>
+
+    <form method="post" action="{{ url_for('register') }}">
+        <div class="form-group">
+            <label for="username">Nazwa:</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Hasło:</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="secretkey">Klucz klubu:</label>
+            <input type="text" name="secretkey">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Zarejestruj</button>
+    </form>
+
+  <p>Masz już konto? <a href="{{ url_for('login') }}">Zaloguj się</a></p>
+
+  
+{% endblock %}

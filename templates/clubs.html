@@ -1,0 +1,36 @@
+<!-- templates/clubs.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Kluby zrzeszone w PZK{% endblock %}
+
+{% block content %}
+    <h2>Kluby PZK</h2>
+
+    {% if clubs %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Lp</th>
+                    <th>Klub</th>
+                    <th>Miasto</th>
+                    <th>Kontakt</th>
+                    <th>Sekretny klucz</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for club in clubs %}
+                    <tr>
+                        <td>{{ club.id }}</td>
+                        <td>{{ club.name }}</td>
+                        <td>{{ club.city }}</td>
+                        <td>{{ club.email }}</td>
+                        <td>{{ club.club_key }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Ni mo klubów.</p>
+    {% endif %}
+{% endblock %}

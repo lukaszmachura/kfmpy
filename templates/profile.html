@@ -22,11 +22,20 @@
             <dt class="col-sm-3">Jodo:</dt>
             <dd class="col-sm-9">{{ user.jodo }}</dd>
         {% endif %}
-        
-        <dt class="col-sm-3">Klub:</dt>
+        {% if user.leader %}
+            <dt class="col-sm-3">Lider klubu:</dd>
+        {% else %}
+            <dt class="col-sm-3">Zawodnik klubu:</dt>
+        {% endif %}
         <dd class="col-sm-9">{{ club.name }}</dd>
 
-        <dt class="col-sm-3">Maisto:</dt>
+        <dt class="col-sm-3">Miasto:</dt>
         <dd class="col-sm-9">{{ club.city }}</dd>
+
+        {% if user.admin %}
+            <dt class="col-sm-3">ADMIN TEJ STRONY</dd>
+        {% endif %}
+
+
     </dl>
 {% endblock %}

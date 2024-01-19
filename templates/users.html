@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Zawodnicy PZK{% endblock %}
+
+{% block content %}
+    <h2>Zawodnicy PZK</h2>
+    {% if users %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>username</th>
+                    <th>Kendo</th>
+                    <th>Iaido</th>
+                    <th>Jodo</th>
+                    <th>Instruktor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                    <tr>
+                        <td>{{ u.id }}</td>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.kendo }}</td>
+                        <td>{{ u.iaido }}</td>
+                        <td>{{ u.jodo }}</td>
+                        <td>{% if u.leader %}Tak{% else %}Nie{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Ni mo zawodników.</p>
+    {% endif %}
+{% endblock %}

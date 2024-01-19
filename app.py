@@ -37,6 +37,10 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
             flash('Login successful!', 'success')
+
+            if not user.coc:
+                return redirect(url_for('coc'))
+
             return redirect(url_for('profile'))
         else:
             flash('Login failed. Check your username and password.', 'error')
@@ -51,12 +55,35 @@ def logout():
     return redirect(url_for('home'))
 
 
+
+@app.route('/coc', methods=['GET', 'POST'])
+@login_required
+def coc():
+    if request.method == 'POST':
+        coc = request.form['coc']
+        
+        if coc == 'true':
+            current_user.coc = True
+            db.session.commit()
+            flash('Dziękujemy za zgodę na Kodeks.', 'success')
+            return redirect(url_for('profile', username=current_user.username))
+        else:
+            flash('Nie można założyć konta, wymagana zgoda na Kodeks Postępowania PZK.', 'error')
+            return redirect(url_for('logout'))
+
+    return render_template('coc.html', agreement=current_user.coc)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         key = request.form['secretkey']
+        rodo = True if request.form['rodo'] == 'true' else False
+
+        # TODO:
+        #   - check id password and confirm_password agree
 
         if User.query.filter_by(username=username).first():
             # Check if the username already exists
@@ -72,7 +99,8 @@ def register():
                     kendo='',
                     iaido='',
                     jodo='',
-                    club=club.id
+                    club=club.id,
+                    rodo=rodo,
                 )
                 db.session.add(new_user)
                 db.session.commit()
@@ -114,7 +142,11 @@ def clubs():
     return render_template('clubs.html', clubs=clubs)
 
 
-
+@app.route('/users')
+def users():
+    # Query all clubs from the database
+    users = User.query.all()
+    return render_template('users.html', users=users)
 
 
 if __name__ == '__main__':

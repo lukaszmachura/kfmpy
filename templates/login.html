@@ -5,11 +5,26 @@
 {% block content %}
     <h1>Login</h1>
     <form method="post" action="{{ url_for('login') }}">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required><br>
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" required><br>
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="username" class="form-label">Podaj nazwę:</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="password" class="form-label">Podaj hasło:</label>
+            </div>
+            <div class="col-md-9">
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+        </div>
+
+       
 
         <input type="submit" value="Login">
     </form>

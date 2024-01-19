@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model, UserMixin):
+    '''user table model'''
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
@@ -12,8 +13,13 @@ class User(db.Model, UserMixin):
     iaido = db.Column(db.String(50))
     jodo = db.Column(db.String(50))
     club = db.Column(db.Integer)
-    is_active = db.Column(db.Boolean, default=True)
+    admin = db.Column(db.Boolean, default=False)
+    leader = db.Column(db.Boolean, default=False)
+    rodo = db.Column(db.Boolean, default=False)
+    coc = db.Column(db.Boolean, default=False)  # code of conduct
 
+    # flask login
+    is_active = db.Column(db.Boolean, default=True)
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

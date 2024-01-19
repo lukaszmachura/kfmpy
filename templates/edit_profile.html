@@ -11,14 +11,80 @@
         <label for="username">Nazwa:</label>
         <input type="text" id="username" name="username" value="{{ user.username }}" required>
 
-        <label for="kendo">Kendo:</label>
-        <input type="text" id="kendo" name="kendo" value="{{ user.kendo }}">
+        <div class="form-group">
+            <label for="kendo">Kendo:</label>
+            <select class="form-control" id="kendo" name="kendo" required>
+                <option value="" disabled>podaj stopień</option>
+                <option value="" {% if user.kendo == '' %}selected{% endif %}>brak</option>
+                <option value="8 kyu" {% if user.kendo == '8 kyu' %}selected{% endif %}>8 kyu</option>
+                <option value="7 kyu" {% if user.kendo == '7 kyu' %}selected{% endif %}>7 kyu</option>
+                <option value="6 kyu" {% if user.kendo == '6 kyu' %}selected{% endif %}>6 kyu</option>
+                <option value="5 kyu" {% if user.kendo == '5 kyu' %}selected{% endif %}>5 kyu</option>
+                <option value="4 kyu" {% if user.kendo == '4 kyu' %}selected{% endif %}>4 kyu</option>
+                <option value="3 kyu" {% if user.kendo == '3 kyu' %}selected{% endif %}>3 kyu</option>
+                <option value="2 kyu" {% if user.kendo == '2 kyu' %}selected{% endif %}>2 kyu</option>
+                <option value="1 kyu" {% if user.kendo == '1 kyu' %}selected{% endif %}>1 kyu</option>
+                <option value="1 dan" {% if user.kendo == '1 dan' %}selected{% endif %}>1 dan</option>
+                <option value="2 dan" {% if user.kendo == '2 dan' %}selected{% endif %}>2 dan</option>
+                <option value="3 dan" {% if user.kendo == '3 dan' %}selected{% endif %}>3 dan</option>
+                <option value="4 dan" {% if user.kendo == '4 dan' %}selected{% endif %}>4 dan</option>
+                <option value="5 dan" {% if user.kendo == '5 dan' %}selected{% endif %}>5 dan</option>
+                <option value="6 dan" {% if user.kendo == '6 dan' %}selected{% endif %}>6 dan</option>
+                <option value="7 dan" {% if user.kendo == '7 dan' %}selected{% endif %}>7 dan</option>
+                <option value="8 dan" {% if user.kendo == '8 dan' %}selected{% endif %}>8 dan</option>
+            </select>
+        </div>
 
-        <label for="iaido">Iaido:</label>
-        <input type="text" id="iaido" name="iaido" value="{{ user.iaido }}">
+        <div class="form-group">
+            <label for="iaido">Iaido:</label>
+            <select class="form-control" id="iaido" name="iaido" required>
+                <option value="" disabled>podaj stopień</option>
+                <option value="" {% if user.iaido == '' %}selected{% endif %}>brak</option>
+                <option value="5 kyu" {% if user.iaido == '5 kyu' %}selected{% endif %}>5 kyu</option>
+                <option value="4 kyu" {% if user.iaido == '4 kyu' %}selected{% endif %}>4 kyu</option>
+                <option value="3 kyu" {% if user.iaido == '3 kyu' %}selected{% endif %}>3 kyu</option>
+                <option value="2 kyu" {% if user.iaido == '2 kyu' %}selected{% endif %}>2 kyu</option>
+                <option value="1 kyu" {% if user.iaido == '1 kyu' %}selected{% endif %}>1 kyu</option>
+                <option value="1 dan" {% if user.iaido == '1 dan' %}selected{% endif %}>1 dan</option>
+                <option value="2 dan" {% if user.iaido == '2 dan' %}selected{% endif %}>2 dan</option>
+                <option value="3 dan" {% if user.iaido == '3 dan' %}selected{% endif %}>3 dan</option>
+                <option value="4 dan" {% if user.iaido == '4 dan' %}selected{% endif %}>4 dan</option>
+                <option value="5 dan" {% if user.iaido == '5 dan' %}selected{% endif %}>5 dan</option>
+                <option value="6 dan" {% if user.iaido == '6 dan' %}selected{% endif %}>6 dan</option>
+                <option value="7 dan" {% if user.iaido == '7 dan' %}selected{% endif %}>7 dan</option>
+                <option value="8 dan" {% if user.iaido == '8 dan' %}selected{% endif %}>8 dan</option>
+            </select>
+        </div>
 
-        <label for="jodo">Jodo:</label>
-        <input type="text" id="jodo" name="jodo" value="{{ user.jodo }}">
+        <div class="form-group">
+            <label for="jodo">Jodo:</label>
+            <select class="form-control" id="jodo" name="jodo" required>
+                <option value="" disabled>podaj stopień</option>
+                <option value="" {% if user.jodo == "" %}selected{% endif %}>brak</option>
+                <option value="5 kyu" {% if user.jodo == '5 kyu' %}selected{% endif %}>5 kyu</option>
+                <option value="4 kyu" {% if user.jodo == '4 kyu' %}selected{% endif %}>4 kyu</option>
+                <option value="3 kyu" {% if user.jodo == '3 kyu' %}selected{% endif %}>3 kyu</option>
+                <option value="2 kyu" {% if user.jodo == '2 kyu' %}selected{% endif %}>2 kyu</option>
+                <option value="1 kyu" {% if user.jodo == "1 kyu" %}selected{% endif %}>1 kyu</option>
+                <option value="1 dan" {% if user.jodo == '1 dan' %}selected{% endif %}>1 dan</option>
+                <option value="2 dan" {% if user.jodo == '2 dan' %}selected{% endif %}>2 dan</option>
+                <option value="3 dan" {% if user.jodo == '3 dan' %}selected{% endif %}>3 dan</option>
+                <option value="4 dan" {% if user.jodo == '4 dan' %}selected{% endif %}>4 dan</option>
+                <option value="5 dan" {% if user.jodo == '5 dan' %}selected{% endif %}>5 dan</option>
+                <option value="6 dan" {% if user.jodo == '6 dan' %}selected{% endif %}>6 dan</option>
+                <option value="7 dan" {% if user.jodo == '7 dan' %}selected{% endif %}>7 dan</option>
+                <option value="8 dan" {% if user.jodo == '8 dan' %}selected{% endif %}>8 dan</option>
+            </select>
+        </div>
+
+        <!-- <label for="kendo">Kendo:</label>
+        <input type="text" id="kendo" name="kendo" value="{{ user.kendo }}"> -->
+
+        <!-- <label for="iaido">Iaido:</label>
+        <input type="text" id="iaido" name="iaido" value="{{ user.iaido }}"> -->
+
+        <!-- <label for="jodo">Jodo:</label>
+        <input type="text" id="jodo" name="jodo" value="{{ user.jodo }}"> -->
 
         <button type="submit">Zapisz zmiany</button>
     </form>

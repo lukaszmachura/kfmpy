@@ -6,6 +6,7 @@ from app import app, db
 def add_clubs():
     '''Add three examples of clubs to the database'''
     example_clubs = [
+        Club(name='PZK', city='Łódź', email='pzk@kendo.pl', club_key='pzklod'),
         Club(name='Bumeikan', city='Katowice', email='pzk@bumeikan.pl', club_key='bumkat'),
         Club(name='WSK', city='Wrocław', email='wiesiek@wsk.pl', club_key='wskwro'),
         Club(name='WKK', city='Warszawa', email='boss@kendo.wawa.pl', club_key='wkkwar'),
@@ -14,31 +15,35 @@ def add_clubs():
     db.session.bulk_save_objects(example_clubs)
     db.session.commit()
 
-# Create two example users
+
 def create_example_users():
-    user1 = User(username='user1', 
-                    password=generate_password_hash('pass1'),
+    '''Create three example users'''
+    example_users = [
+        User(username='user1', 
+                    password=generate_password_hash('user1'),
                     kendo='5 dan',
                     iaido='2 dan',
                     jodo='',
-                    club=3)
-    user2 = User(username='user2', 
-                    password=generate_password_hash('pass2'),
+                    club=3),
+        User(username='user2', 
+                    password=generate_password_hash('user2'),
                     kendo='',
                     iaido='5 dan',
                     jodo='6 dan',
-                    club=2)
-    admin = User(username='admin', 
-                    password=generate_password_hash('passa'),
+                    club=2,
+                    leader=True),
+        User(username='admin', 
+                    password=generate_password_hash('admin'),
                     kendo='',
                     iaido='6 dan',
                     jodo='6 dan',
-                    club=1)
+                    club=1,
+                    admin=True)
+    ]
 
-    db.session.add(user1)
-    db.session.add(user2)
-    db.session.add(admin)
+    db.session.bulk_save_objects(example_users)
     db.session.commit()
+
 
 if __name__ == '__main__':
     with app.app_context():

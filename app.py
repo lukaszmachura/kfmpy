@@ -151,13 +151,19 @@ def users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
+@app.route('/instructors')
+def instructors():
+    # Query all players from the database
+    clubs = Club.query.all()
+    players = Player.query.all()
+    return render_template('instructors.html', players=players, user=current_user, clubs=clubs)
 
 @app.route('/players')
 def players():
     # Query all players from the database
-    user = current_user
+    clubs = Club.query.all()
     players = Player.query.all()
-    return render_template('players.html', players=players, user=user)
+    return render_template('players.html', players=players, user=current_user, clubs=clubs)
 
 
 @app.route('/template')
@@ -184,6 +190,19 @@ def edit_player(id):
         
         db.session.commit()
         return redirect(url_for('players'))
+    return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
+
+
+@app.route('/edit_instructor/<int:id>', methods=['POST'])
+def edit_instructor(id):
+    player = Player.query.get_or_404(id)
+    if request.method == 'POST':
+        new_kendo = request.form.get('newKendo')
+        new_iaido = request.form.get('newIaido')       
+        new_jodo = request.form.get('newJodo')
+        player.instructor = str(new_kendo) + str(new_iaido) + str(new_jodo)
+        db.session.commit()
+        return redirect(url_for('instructors'))
     return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
 
 

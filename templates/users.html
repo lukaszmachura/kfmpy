@@ -25,8 +25,17 @@
                         <td>{{ u.username }}</td>
                         <td>{{ u.name }}</td>
                         <td>{{ u.surname }}</td>
-                        <td>{{ u.admin }}</td>
-                        <td>{% if u.parentID is none %}Niii{% else %}KIDO!{% endif %}</td>
+                        <td>
+                            {% if u.admin == 1 %}J
+                            {% elif u.admin == 2 %}I
+                            {% elif u.admin == 3 %}I+J
+                            {% elif u.admin == 4 %}K
+                            {% elif u.admin == 5 %}K+J
+                            {% elif u.admin == 6 %}K+I
+                            {% elif u.admin == 7 %}admin
+                            {% endif %}
+                        </td>
+                        <td>{% if not u.parentID is none %}KIDO!{% endif %}</td>
                         <!-- <td><a href="{{ url_for('edit_profile') }}" class="btn btn-secondary">Edytuj</a></td> -->
                     </tr>
                 {% endfor %}

@@ -44,12 +44,13 @@ class Player(db.Model):
     u = db.relationship('User', backref=db.backref('items', lazy=True))
     userID = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    name = db.Column(db.String(100))
     pesel = db.Column(db.String(11))
     city = db.Column(db.String(50))
     phone = db.Column(db.String(50))
     club = db.Column(db.Integer)  # iD in Club table
 
-    licence = db.Column(db.Integer, default=0)
+    licence = db.Column(db.Integer, default=0)  # same as admin
 
     kendo = db.Column(db.String(50))
     kendoshogo = db.Column(db.Integer, default=0)
@@ -61,7 +62,16 @@ class Player(db.Model):
     leader = db.Column(db.Boolean, default=False)
 
     playeriD = db.Column(db.String(10))
-    instructoriD = db.Column(db.Integer, default=0)  # iD in Intructor table
+    instructor = db.Column(db.String(3))  # iD in Intructor table
+    # None - normal player
+    # 001 - jodo instructor / intruktor
+    # 010 - iaido instructor
+    # 100 - kendo instructor
+    # 101 - kendo + jodo instructor
+    # 110 - kendo + iaido instructor
+    # 111 - kendo + iaido + jodo instructor
+    #   2 - coach level 2 / trener 2 klasy
+    #   3 - coach level 1 / trener 1 klasy
     shimpaniD = db.Column(db.Integer, default=0)  # TODO
     examinatoriD = db.Column(db.Integer, default=0)  # TODO
 

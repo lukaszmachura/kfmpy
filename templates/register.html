@@ -9,7 +9,7 @@
         <form method="post" action="{{ url_for('register') }}">
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="username" class="form-label">Podaj nazwę:</label>
+                    <label for="username" class="form-label">Podaj email:</label>
                 </div>
                 <div class="col-md-9">
                     <input type="text" class="form-control" id="username" name="username" required>
@@ -25,14 +25,14 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <!-- <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="confirm_password" class="form-label">Powtórz hasło:</label>
                 </div>
                 <div class="col-md-9">
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                 </div>
-            </div>
+            </div> -->
 
             <div class="row mb-3">
               <div class="col-md-3">
@@ -43,9 +43,17 @@
               </div>
           </div>
 
+          <!-- <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="rodo" name="kid" data-val="kid" and value="true">
+            <label class="form-check-label" for="kid">
+              Konto dla osoby niepełnoletniej.
+            </label>
+          </div> -->
+
           <div class="form-check mb-3">
             <input type="checkbox" class="form-check-input" id="rodo" name="rodo" data-val="true" and value="true" required>
             <label class="form-check-label" for="rodo">
+              <span class="text-danger">*</span>
               Wyrażam zgodę na przetwarzanie danych osobowych przez Polski Związek Kendo z siedzibą w Łodzi, 
               ul. Zgierska 73 pok. 410, na potrzeby mojego uczestnictwa w szkoleniach, zawodach oraz innych 
               przewidzianych statutem formach działalności wspieranych przez Polski Związek Kendo.

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Zawodnicy PZK{% endblock %}
+
+{% block content %}
+    <h2>Zawodnicy PZK</h2>
+    {% if players %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>nr</th>
+                    <th>Kendo</th>
+                    <th>Iaido</th>
+                    <th>Jodo</th>
+                    <th>Instruktor</th>
+                    <th>
+                        {% if user.is_authenticated and user.admin %}
+                        Edycja
+                        {% endif %}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in players %}
+                    <tr>
+                        <td>{{ p.playeriD }}</td>
+                        <td>{{ p.kendo }}</td>
+                        <td>{{ p.iaido }}</td>
+                        <td>{{ p.jodo }}</td>
+                        <td>{% if p.leader %}Tak{% else %}Nie{% endif %}</td>
+                        <td>
+                            {% if user.is_authenticated and user.admin %}
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#editModal{{ p.id }}">
+                                Edit
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="editModal{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel">Edycja zawodnika</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Form for editing the player -->
+                                            <form method="post" action="{{ url_for('edit_player', id=p.id) }}">
+                                                <div class="form-group">
+                                                    <label for="newKendo">Nowy stopień Kendo:</label>
+                                                    <input type="text" class="form-control" id="newKendo" name="newKendo"  value="{{ p.kendo }}" >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="newIaido">Nowy stopień Iaido:</label>
+                                                    <input type="text" class="form-control" id="newIaido" name="newIaido"  value="{{ p.iaido }}" >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="newJodo">Nowy stopień Jodo:</label>
+                                                    <input type="text" class="form-control" id="newJodo" name="newJodo"  value="{{ p.jodo }}" >
+                                                </div>
+                                                <button type="submit" class="btn btn-primary mt-3">Zapisz zmiany</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Ni mo zawodników.</p>
+    {% endif %}
+{% endblock %}

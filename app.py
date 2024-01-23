@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 #, UserMixin
 # from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Club
+from models import db, User, Club, Player
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kendo'
@@ -96,14 +96,13 @@ def register():
                 new_user = User(
                     username=username,
                     password=generate_password_hash(password),
-                    kendo='',
-                    iaido='',
-                    jodo='',
-                    club=club.id,
                     rodo=rodo,
                 )
                 db.session.add(new_user)
                 db.session.commit()
+                # u = User.query.filter_by(username=username).first()
+                # u.playeriD = f'PZK.{u.id:05}'
+                # db.session.commit()
 
                 flash('Rejestracja przebiegła poprawnie! Możesz się zalogować.', 'success')
                 return redirect(url_for('login'))
@@ -116,8 +115,12 @@ def register():
 @app.route('/profile')
 @login_required
 def profile():
-    club = Club.query.filter_by(id=current_user.club).first()
-    return render_template('profile.html', user=current_user, club=club)
+    player = Player.query.filter_by(userID=current_user.id).first()
+    if player:
+        club = Club.query.filter_by(id=player.club).first()
+    else:
+        club = None
+    return render_template('profile.html', user=current_user, player=player, club=club)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -147,6 +150,42 @@ def users():
     # Query all clubs from the database
     users = User.query.all()
     return render_template('users.html', users=users)
+
+
+@app.route('/players')
+def players():
+    # Query all players from the database
+    user = current_user
+    players = Player.query.all()
+    return render_template('players.html', players=players, user=user)
+
+
+@app.route('/template')
+def template():
+    items = User.query.all()
+    return render_template('template.html', items=items)
+
+
+@app.route('/edit_player/<int:id>', methods=['POST'])
+def edit_player(id):
+    player = Player.query.get_or_404(id)
+    if request.method == 'POST':
+        new_kendo = request.form.get('newKendo')
+        if new_kendo:
+            player.kendo = new_kendo
+
+        new_iaido = request.form.get('newIaido')
+        if new_iaido:
+            player.iaido = new_iaido
+        
+        new_jodo = request.form.get('newJodo')
+        if new_jodo:
+            player.jodo = new_jodo
+        
+        db.session.commit()
+        return redirect(url_for('players'))
+    return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
+
 
 
 if __name__ == '__main__':

@@ -1,28 +1,39 @@
-<!-- profile.html -->
-
 {% extends 'base.html' %}
 
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-    <h2>User Profile - {{ user.username }}</h2>
+    <h1>Cześć {{ user.name }} {{ user.surname }}!</h1>
+    <h2>Dane podstawowe</h2>
+    <dl class="row">
+        <dt class="col-sm-3">id:</dt>
+        <dd class="col-sm-9">{{ user.id }}</dd>
+        <dt class="col-sm-3">Imię</dt>
+        <dd class="col-sm-9">{{ user.name }}</dd>
+
+        <dt class="col-sm-3">Nazwisko</dt>
+        <dd class="col-sm-9">{{ user.surname }}</dd>
+    </dl>
+
+    {% if player %}
+    <h2>Dane zawodnika PZK</h2>
 
     <dl class="row">
-        <dt class="col-sm-3">Zawodnik:</dt>
-        <dd class="col-sm-9">{{ user.username }}</dd>
-        {% if user.kendo %}
+        <dt class="col-sm-3">player:</dt>
+        <dd class="col-sm-9">{{ player.userID }} {{ player.playeriD }}</dd>
+        {% if player.kendo %}
             <dt class="col-sm-3">Kendo:</dt>
-            <dd class="col-sm-9">{{ user.kendo }}</dd>
+            <dd class="col-sm-9">{{ player.kendo }}</dd>
         {% endif %}
-        {% if user.iaido %}
+        {% if player.iaido %}
             <dt class="col-sm-3">Iaido:</dt>
-            <dd class="col-sm-9">{{ user.iaido }}</dd>
+            <dd class="col-sm-9">{{ player.iaido }}</dd>
         {% endif %}
-        {% if user.jodo %}
+        {% if player.jodo %}
             <dt class="col-sm-3">Jodo:</dt>
-            <dd class="col-sm-9">{{ user.jodo }}</dd>
+            <dd class="col-sm-9">{{ player.jodo }}</dd>
         {% endif %}
-        {% if user.leader %}
+        {% if player.leader %}
             <dt class="col-sm-3">Lider klubu:</dd>
         {% else %}
             <dt class="col-sm-3">Zawodnik klubu:</dt>
@@ -31,11 +42,28 @@
 
         <dt class="col-sm-3">Miasto:</dt>
         <dd class="col-sm-9">{{ club.city }}</dd>
-
-        {% if user.admin %}
-            <dt class="col-sm-3">ADMIN TEJ STRONY</dd>
-        {% endif %}
-
-
     </dl>
+    {% endif %}
+
+    {% if user.admin %}
+    <dl class="row">
+        <dt class="col-sm-3">Admin</dt>
+        {% if user.admin == 1 %}
+            <dd class="col-sm-9">Uprawnienia edycji Jodo</dd>
+        {% elif user.admin == 2 %}
+            <dd class="col-sm-9">Uprawnienia edycji Iaido</dd>
+        {% elif user.admin == 3 %}
+            <dd class="col-sm-9">Uprawnienia edycji Jodo i Iaido</dd>
+        {% elif user.admin == 4 %}
+            <dd class="col-sm-9">Uprawnienia edycji Kendo</dd>
+        {% elif user.admin == 5 %}
+            <dd class="col-sm-9">Uprawnienia edycji Jodo i Kendo</dd>
+        {% elif user.admin == 6 %}
+            <dd class="col-sm-9">Uprawnienia edycji Iaido i Kendo</dd>
+        {% elif user.admin == 7 %}
+            <dd class="col-sm-9">Admin serwisu - pełne uprawnienia edycji (Jodo, Iaido, Kendo)</dd>
+        {% endif %}
+    </dl>
+    {% endif %}
+    
 {% endblock %}

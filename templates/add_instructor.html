@@ -3,15 +3,7 @@
 {% block title %}Instruktorzy PZK{% endblock %}
 
 {% block content %}
-    <div class="d-flex align-items-center justify-content-between">
-        <h2 class="mb-0">Instruktorzy PZK</h2> 
-        <!-- mb-0 removes the margin from the bottom of the header -->
-        {% if user.is_authenticated and user.admin %}
-            <a href="{{ url_for('add_instructor') }}" class="btn btn-primary">
-            + Add
-            </a>
-        {% endif %}
-  </div>
+    <h2>Dodaj licencję instruktora PZK</h2>
     {% if players %}
 
         <table class="table">
@@ -32,7 +24,7 @@
             </thead>
             <tbody>
                 {% for p in players %}
-                {% if p.instructor and p.instructor != "000" %}
+                {% if not p.instructor or p.instructor == "000" %}
                     <tr>
                         <td>{{ p.playeriD }}</td>
                         <td>

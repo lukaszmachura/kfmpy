@@ -15,7 +15,9 @@
                     <th>Klub</th>
                     <th>Miasto</th>
                     <th>Kontakt</th>
-                    <th>Sekretny klucz</th>
+                    {% if current_user.is_authenticated and current_user.admin %}
+                        <th>Sekretny klucz</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -25,7 +27,9 @@
                         <td>{{ club.name }}</td>
                         <td>{{ club.city }}</td>
                         <td>{{ club.email }}</td>
-                        <td>{{ club.club_key }}</td>
+                        {% if current_user.is_authenticated and current_user.admin %}
+                            <td>{{ club.club_key }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>

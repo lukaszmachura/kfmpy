@@ -1,2 +1,2 @@
 # kfmpy
-On-line system management for kendo federation with Flask
+Kendo federation magement system - on-line system with Flask

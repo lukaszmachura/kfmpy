@@ -4,6 +4,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 # from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Club, Player
+from functools import wraps
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kendo'
@@ -18,6 +19,22 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Check if the current user is logged in and is an admin
+        if current_user.is_authenticated and current_user.admin:
+            return f(*args, **kwargs)
+        else:
+            # Redirect to a different page or show an error message
+            # You can also abort with a 403 Forbidden status code
+            flash('You do not have permission to access this page.', 'error')
+            return redirect(url_for('home'))
+        # "You do not have permission to access this page.", 403
+    return decorated_function
+
 
 # Routes
 @app.route('/')
@@ -158,6 +175,15 @@ def instructors():
     players = Player.query.all()
     return render_template('instructors.html', players=players, user=current_user, clubs=clubs)
 
+@app.route('/add_instructor')
+@login_required
+@admin_required
+def add_instructor():
+    # Query all players from the database
+    clubs = Club.query.all()
+    players = Player.query.all()
+    return render_template('add_instructor.html', players=players, user=current_user, clubs=clubs)
+
 @app.route('/players')
 def players():
     # Query all players from the database
@@ -173,6 +199,7 @@ def template():
 
 
 @app.route('/edit_player/<int:id>', methods=['POST'])
+@login_required
 def edit_player(id):
     player = Player.query.get_or_404(id)
     if request.method == 'POST':
@@ -187,13 +214,26 @@ def edit_player(id):
         new_jodo = request.form.get('newJodo')
         if new_jodo:
             player.jodo = new_jodo
-        
+
+        kendoactive = request.form.get('kendoactive')
+        iaidoactive = request.form.get('iaidoactive')
+        jodoactive = request.form.get('jodoactive')
+        licence = 0
+        if kendoactive:
+            licence += int(kendoactive)
+        if iaidoactive:
+            licence += int(iaidoactive)
+        if jodoactive:
+            licence += int(jodoactive)
+        player.licence = licence
+    
         db.session.commit()
         return redirect(url_for('players'))
     return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
 
 
 @app.route('/edit_instructor/<int:id>', methods=['POST'])
+@login_required
 def edit_instructor(id):
     player = Player.query.get_or_404(id)
     if request.method == 'POST':

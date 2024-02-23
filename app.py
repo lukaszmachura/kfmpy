@@ -5,6 +5,9 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Club, Player
 from functools import wraps
+import datetime
+from utils import is_valid_pesel, get_playeriD
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kendo'
@@ -30,10 +33,31 @@ def admin_required(f):
         else:
             # Redirect to a different page or show an error message
             # You can also abort with a 403 Forbidden status code
-            flash('You do not have permission to access this page.', 'error')
+            flash('You do not have permission to access this page (403).', 'error')
             return redirect(url_for('home'))
-        # "You do not have permission to access this page.", 403
     return decorated_function
+
+
+def is_older_than_one_year(date):
+    if date == None:
+        return False
+    
+    current_date = datetime.datetime.now()
+    one_year_ago = current_date - datetime.timedelta(days=365)
+    
+    if date < one_year_ago:
+        return True
+    else:
+        return False
+    
+def is_younger_than_one_year(date):
+    if date == None:
+        return False
+    return not is_older_than_one_year(date)
+
+# Register the filter with Jinja2
+app.jinja_env.filters['is_older_than_one_year'] = is_older_than_one_year
+app.jinja_env.filters['is_younger_than_one_year'] = is_younger_than_one_year
 
 
 # Routes
@@ -64,13 +88,13 @@ def login():
 
     return render_template('login.html')
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('Logout successful!', 'success')
     return redirect(url_for('home'))
-
 
 
 @app.route('/coc', methods=['GET', 'POST'])
@@ -80,7 +104,7 @@ def coc():
         coc = request.form['coc']
         
         if coc == 'true':
-            current_user.coc = True
+            current_user.coc = datetime.datetime.now()
             db.session.commit()
             flash('Dziękujemy za zgodę na Kodeks.', 'success')
             return redirect(url_for('profile', username=current_user.username))
@@ -95,9 +119,10 @@ def coc():
 def register():
     if request.method == 'POST':
         username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
         key = request.form['secretkey']
-        rodo = True if request.form['rodo'] == 'true' else False
+        rodo = datetime.datetime.now() if request.form['rodo'] == 'true' else False
 
         # TODO:
         #   - check id password and confirm_password agree
@@ -113,7 +138,9 @@ def register():
                 new_user = User(
                     username=username,
                     password=generate_password_hash(password),
+                    email=email,
                     rodo=rodo,
+                    clubID=club.id,
                 )
                 db.session.add(new_user)
                 db.session.commit()
@@ -133,24 +160,22 @@ def register():
 @login_required
 def profile():
     player = Player.query.filter_by(userID=current_user.id).first()
-    if player:
-        club = Club.query.filter_by(id=player.club).first()
-    else:
-        club = None
+    club = Club.query.filter_by(id=current_user.clubID).first()
     return render_template('profile.html', user=current_user, player=player, club=club)
+
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     if request.method == 'POST':
-        # Update user profile information based on the form submission
-        current_user.username = request.form['username']
-        current_user.kendo = request.form['kendo']
-        current_user.iaido = request.form['iaido']
-        current_user.jodo = request.form['jodo']
+        # current_user.username = request.form['username']
+        current_user.name = request.form['name']
+        current_user.surname = request.form['surname']
+        current_user.email = request.form['email']
+        current_user.phone = request.form['phone']
         db.session.commit()
         flash('Nowe dane zapisane.', 'success')
-        return redirect(url_for('profile', username=current_user.username))
+        return redirect(url_for('profile'))
 
     return render_template('edit_profile.html', user=current_user)
 
@@ -168,12 +193,14 @@ def users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
+
 @app.route('/instructors')
 def instructors():
     # Query all players from the database
     clubs = Club.query.all()
     players = Player.query.all()
     return render_template('instructors.html', players=players, user=current_user, clubs=clubs)
+
 
 @app.route('/add_instructor')
 @login_required
@@ -183,6 +210,35 @@ def add_instructor():
     clubs = Club.query.all()
     players = Player.query.all()
     return render_template('add_instructor.html', players=players, user=current_user, clubs=clubs)
+
+
+@app.route('/edit_instructor/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def edit_instructor(id):
+    player = Player.query.get_or_404(id)
+    if request.method == 'POST':
+        if player.instructor == None:
+            player.instructor = '000'
+
+        new_kendo = request.form.get('newKendo')
+        if new_kendo == None:
+            new_kendo = player.instructor[0]
+        
+        new_iaido = request.form.get('newIaido')
+        if new_iaido == None:
+            new_iaido = player.instructor[1]
+        
+        new_jodo = request.form.get('newJodo')
+        if new_jodo == None:
+            new_jodo = player.instructor[2]
+        
+        player.instructor = str(new_kendo) + str(new_iaido) + str(new_jodo)
+        db.session.commit()
+        return redirect(url_for('instructors'))
+    return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
+
+
 
 @app.route('/players')
 def players():
@@ -200,6 +256,7 @@ def template():
 
 @app.route('/edit_player/<int:id>', methods=['POST'])
 @login_required
+@admin_required
 def edit_player(id):
     player = Player.query.get_or_404(id)
     if request.method == 'POST':
@@ -226,25 +283,103 @@ def edit_player(id):
         if jodoactive:
             licence += int(jodoactive)
         player.licence = licence
+
+        kendolicence = request.form.get('kendolicence')
+        if kendolicence:
+            player.kendolicence = datetime.datetime.strptime(kendolicence, '%Y-%m-%d')
+        
+        iaidolicence = request.form.get('iaidolicence')
+        if iaidolicence:
+            player.iaidolicence = datetime.datetime.strptime(iaidolicence, '%Y-%m-%d')
+
+        jodolicence = request.form.get('jodolicence')
+        print('jodolicence', jodolicence)
+        if jodolicence:
+            player.jodolicence = datetime.datetime.strptime(jodolicence, '%Y-%m-%d')
     
         db.session.commit()
         return redirect(url_for('players'))
     return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
 
 
-@app.route('/edit_instructor/<int:id>', methods=['POST'])
-@login_required
-def edit_instructor(id):
-    player = Player.query.get_or_404(id)
-    if request.method == 'POST':
-        new_kendo = request.form.get('newKendo')
-        new_iaido = request.form.get('newIaido')       
-        new_jodo = request.form.get('newJodo')
-        player.instructor = str(new_kendo) + str(new_iaido) + str(new_jodo)
-        db.session.commit()
-        return redirect(url_for('instructors'))
-    return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
 
+@app.route('/edit_uplayer', methods=['GET', 'POST'])
+@login_required
+def edit_uplayer():
+    if not current_user.name or not current_user.surname:
+        flash('Najpierw dodaj imię i nazwisko profilu głównym', 'error')
+        return redirect(url_for('edit_profile'))
+
+    player = Player.query.filter_by(userID=current_user.id).first()
+    club = Club.query.filter_by(id=current_user.clubID).first()
+
+    if request.method == 'POST':
+        name = ''
+        if isinstance(current_user.name, str):
+            name += current_user.name
+        if isinstance(current_user.surname, str):
+            name += " " + current_user.surname
+        
+        new_kendo = request.form.get('kendo')
+        kendoshogo = int(request.form.get('kendoshogo'))
+        new_iaido = request.form.get('iaido')
+        iaidoshogo = int(request.form.get('iaidoshogo'))
+        new_jodo = request.form.get('jodo')
+        jodoshogo = int(request.form.get('jodoshogo'))
+
+        address = request.form.get('address')
+        pesel = request.form.get('pesel')
+        if not is_valid_pesel(pesel):
+            flash('Niepoprawny PESEL.', 'error')
+            return redirect(url_for('edit_uplayer'))
+
+        if player:
+            player.name = name
+
+            if new_kendo:
+                player.kendo = new_kendo
+            if kendoshogo:
+                player.kendoshogo = kendoshogo
+
+            if new_iaido:
+                player.iaido = new_iaido
+            if iaidoshogo:
+                player.iaidoshogo = iaidoshogo
+            
+            if new_jodo:
+                player.jodo = new_jodo
+            if jodoshogo:
+                player.jodoshogo = jodoshogo
+
+            if address:
+                player.address = address
+            
+            if pesel:
+                player.pesel = pesel
+
+        else:
+            new_player = Player(
+                userID=current_user.id,
+                name=name,
+                pesel=pesel if pesel else '',
+                address=address if address else '',
+                kendo=new_kendo if new_kendo else '',
+                kendoshogo=kendoshogo,
+                iaido=new_iaido if new_iaido else '',
+                iaidoshogo=iaidoshogo,
+                jodo=new_jodo if new_jodo else '',
+                jodoshogo=jodoshogo,
+                club=club.id,
+                )
+            db.session.add(new_player)
+            db.session.commit()
+            p = Player.query.filter_by(userID=current_user.id).first()
+            p.playeriD = get_playeriD(p.id)
+
+        db.session.commit()
+        return redirect(url_for('profile'))
+    
+    return render_template('edit_uplayer.html', user=current_user, player=player, club=club)
 
 
 if __name__ == '__main__':

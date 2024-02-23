@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 
@@ -9,12 +10,16 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    rodo = db.Column(db.Boolean, default=False)
-    coc = db.Column(db.Boolean, default=False)  # code of conduct
-
     parentID = db.Column(db.Integer)  # make this local reference
-    name = db.Column(db.String(50))
-    surname = db.Column(db.String(50))
+    clubID = db.Column(db.Integer)  # TODO make this club reference
+
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100))
+    surname = db.Column(db.String(100))
+    phone = db.Column(db.String(50))
+
+    rodo = db.Column(db.DateTime) #, server_default=func.now())
+    coc = db.Column(db.DateTime)  # code of conduct
 
     admin = db.Column(db.Integer, default=0)
     # 0 - normal user
@@ -46,18 +51,26 @@ class Player(db.Model):
 
     name = db.Column(db.String(100))
     pesel = db.Column(db.String(11))
-    city = db.Column(db.String(50))
-    phone = db.Column(db.String(50))
+    address = db.Column(db.String(50))
     club = db.Column(db.Integer)  # iD in Club table
 
-    licence = db.Column(db.Integer, default=0)  # same as admin
+    licence = db.Column(db.Integer, default=0)  # same as adminz
 
+    # 1 - renshi, 2 - kyoshi, 3 - hanshi
+    kendoshogo = db.Column(db.Integer, default=0) 
     kendo = db.Column(db.String(50))
-    kendoshogo = db.Column(db.Integer, default=0)
-    iaido = db.Column(db.String(50))
+    kendolicence = db.Column(db.DateTime)
+    kendolicencehistory = db.Column(db.String(200))
+
     iaidoshogo = db.Column(db.Integer, default=0)
-    jodo = db.Column(db.String(50))
+    iaido = db.Column(db.String(50))
+    iaidolicence = db.Column(db.DateTime)
+    iaidolicencehistory = db.Column(db.String(200))
+
     jodoshogo = db.Column(db.Integer, default=0)
+    jodo = db.Column(db.String(50))
+    jodolicence = db.Column(db.DateTime)
+    jodolicencehistory = db.Column(db.String(200))
 
     leader = db.Column(db.Boolean, default=False)
 
@@ -73,7 +86,7 @@ class Player(db.Model):
     #   2 - coach level 2 / trener 2 klasy
     #   3 - coach level 1 / trener 1 klasy
     shimpaniD = db.Column(db.Integer, default=0)  # TODO
-    examinatoriD = db.Column(db.Integer, default=0)  # TODO
+    examineriD = db.Column(db.Integer, default=0)  # TODO
 
 
 class Club(db.Model):

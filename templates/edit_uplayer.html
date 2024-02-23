@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Zmień dane zawodnika{% endblock %}
+
+{% block content %}
+    <h2>Edycja danych</h2>
+
+    <form method="post" action="{{ url_for('edit_uplayer') }}">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="username" class="form-label">zawodnik</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="name" value="{{ player.name }}" name="name" disabled>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="username" class="form-label">numer licencji</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="name" value="{{ player.playeriD }}" name="name" disabled>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="username" class="form-label">klub</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="name" value="{{ club.name }}" name="name" disabled>
+            </div>
+        </div>
+
+        <hr class="hr hr-blurry col-sm-3" />
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="pesel" class="form-label">pesel</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="pesel" value="{{ player.pesel if player.pesel }}" name="pesel" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="address" class="form-label">adres</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="address" value="{{ player.address if player.address }}" name="address" required>
+            </div>
+        </div>
+       
+        <div class="form-group">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                   <label for="kendoshogo" class="form-label">shogo kendo</label>
+                </div>
+                <div class="col-md-9">
+                    <select class="form-control" id="kendoshogo" name="kendoshogo" required>
+                        <option value="" disabled>podaj stopień</option>
+                        <option value=0 {% if player.kendoshogo == 0 %}selected{% endif %}>brak stopnia shogo</option>
+                        <option value=1 {% if player.kendoshogo == 1 %}selected{% endif %}>renshi</option>
+                        <option value=2 {% if player.kendoshogo == 2 %}selected{% endif %}>kyoshi</option>
+                        <option value=3 {% if player.kendoshogo == 3 %}selected{% endif %}>hanshi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                   <label for="kendo" class="form-label">stopień kendo</label>
+                </div>
+                <div class="col-md-9">
+                    <select class="form-control" id="kendo" name="kendo" required>
+                        <option value="" disabled>podaj stopień</option>
+                        <option value="" {% if player.kendo == '' %}selected{% endif %}>brak stopnia</option>
+                        <option value="8 kyu" {% if player.kendo == '8 kyu' %}selected{% endif %}>8 kyu</option>
+                        <option value="7 kyu" {% if player.kendo == '7 kyu' %}selected{% endif %}>7 kyu</option>
+                        <option value="6 kyu" {% if player.kendo == '6 kyu' %}selected{% endif %}>6 kyu</option>
+                        <option value="5 kyu" {% if player.kendo == '5 kyu' %}selected{% endif %}>5 kyu</option>
+                        <option value="4 kyu" {% if player.kendo == '4 kyu' %}selected{% endif %}>4 kyu</option>
+                        <option value="3 kyu" {% if player.kendo == '3 kyu' %}selected{% endif %}>3 kyu</option>
+                        <option value="2 kyu" {% if player.kendo == '2 kyu' %}selected{% endif %}>2 kyu</option>
+                        <option value="1 kyu" {% if player.kendo == '1 kyu' %}selected{% endif %}>1 kyu</option>
+                        <option value="1 dan" {% if player.kendo == '1 dan' %}selected{% endif %}>1 dan</option>
+                        <option value="2 dan" {% if player.kendo == '2 dan' %}selected{% endif %}>2 dan</option>
+                        <option value="3 dan" {% if player.kendo == '3 dan' %}selected{% endif %}>3 dan</option>
+                        <option value="4 dan" {% if player.kendo == '4 dan' %}selected{% endif %}>4 dan</option>
+                        <option value="5 dan" {% if player.kendo == '5 dan' %}selected{% endif %}>5 dan</option>
+                        <option value="6 dan" {% if player.kendo == '6 dan' %}selected{% endif %}>6 dan</option>
+                        <option value="7 dan" {% if player.kendo == '7 dan' %}selected{% endif %}>7 dan</option>
+                        <option value="8 dan" {% if player.kendo == '8 dan' %}selected{% endif %}>8 dan</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                   <label for="iaidoshogo" class="form-label">shogo iaido</label>
+                </div>
+                <div class="col-md-9">
+                    <select class="form-control" id="iaidoshogo" name="iaidoshogo" required>
+                        <option value="" disabled>podaj stopień</option>
+                        <option value=0 {% if player.iaidoshogo == 0 %}selected{% endif %}>brak stopnia shogo</option>
+                        <option value=1 {% if player.iaidoshogo == 1 %}selected{% endif %}>renshi</option>
+                        <option value=2 {% if player.iaidoshogo == 2 %}selected{% endif %}>kyoshi</option>
+                        <option value=3 {% if player.iaidoshogo == 3 %}selected{% endif %}>hanshi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="iaido">stopień iaido</label>
+                </div>
+                <div class="col-md-9">  
+                    <select class="form-control" id="iaido" name="iaido" required>
+                        <option value="" disabled>podaj stopień</option>
+                        <option value="" {% if player.iaido == '' %}selected{% endif %}>brak stopnia</option>
+                        <option value="5 kyu" {% if player.iaido == '5 kyu' %}selected{% endif %}>5 kyu</option>
+                        <option value="4 kyu" {% if player.iaido == '4 kyu' %}selected{% endif %}>4 kyu</option>
+                        <option value="3 kyu" {% if player.iaido == '3 kyu' %}selected{% endif %}>3 kyu</option>
+                        <option value="2 kyu" {% if player.iaido == '2 kyu' %}selected{% endif %}>2 kyu</option>
+                        <option value="1 kyu" {% if player.iaido == '1 kyu' %}selected{% endif %}>1 kyu</option>
+                        <option value="1 dan" {% if player.iaido == '1 dan' %}selected{% endif %}>1 dan</option>
+                        <option value="2 dan" {% if player.iaido == '2 dan' %}selected{% endif %}>2 dan</option>
+                        <option value="3 dan" {% if player.iaido == '3 dan' %}selected{% endif %}>3 dan</option>
+                        <option value="4 dan" {% if player.iaido == '4 dan' %}selected{% endif %}>4 dan</option>
+                        <option value="5 dan" {% if player.iaido == '5 dan' %}selected{% endif %}>5 dan</option>
+                        <option value="6 dan" {% if player.iaido == '6 dan' %}selected{% endif %}>6 dan</option>
+                        <option value="7 dan" {% if player.iaido == '7 dan' %}selected{% endif %}>7 dan</option>
+                        <option value="8 dan" {% if player.iaido == '8 dan' %}selected{% endif %}>8 dan</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                   <label for="jodoshogo" class="form-label">shogo jodo</label>
+                </div>
+                <div class="col-md-9">
+                    <select class="form-control" id="jodoshogo" name="jodoshogo" required>
+                        <option value="" disabled>podaj stopień</option>
+                        <option value=0 {% if player.jodoshogo == 0 %}selected{% endif %}>brak stopnia shogo</option>
+                        <option value=1 {% if player.jodoshogo == 1 %}selected{% endif %}>renshi</option>
+                        <option value=2 {% if player.jodoshogo == 2 %}selected{% endif %}>kyoshi</option>
+                        <option value=3 {% if player.jodoshogo == 3 %}selected{% endif %}>hanshi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="jodo">stopień jodo</label>
+                </div>
+                <div class="col-md-9">
+                    <select class="form-control" id="jodo" name="jodo" required>
+                        <option value="" disabled>podaj stopień</option>
+                        <option value="" {% if player.jodo == "" %}selected{% endif %}>brak stopnia</option>
+                        <option value="5 kyu" {% if player.jodo == '5 kyu' %}selected{% endif %}>5 kyu</option>
+                        <option value="4 kyu" {% if player.jodo == '4 kyu' %}selected{% endif %}>4 kyu</option>
+                        <option value="3 kyu" {% if player.jodo == '3 kyu' %}selected{% endif %}>3 kyu</option>
+                        <option value="2 kyu" {% if player.jodo == '2 kyu' %}selected{% endif %}>2 kyu</option>
+                        <option value="1 kyu" {% if player.jodo == "1 kyu" %}selected{% endif %}>1 kyu</option>
+                        <option value="1 dan" {% if player.jodo == '1 dan' %}selected{% endif %}>1 dan</option>
+                        <option value="2 dan" {% if player.jodo == '2 dan' %}selected{% endif %}>2 dan</option>
+                        <option value="3 dan" {% if player.jodo == '3 dan' %}selected{% endif %}>3 dan</option>
+                        <option value="4 dan" {% if player.jodo == '4 dan' %}selected{% endif %}>4 dan</option>
+                        <option value="5 dan" {% if player.jodo == '5 dan' %}selected{% endif %}>5 dan</option>
+                        <option value="6 dan" {% if player.jodo == '6 dan' %}selected{% endif %}>6 dan</option>
+                        <option value="7 dan" {% if player.jodo == '7 dan' %}selected{% endif %}>7 dan</option>
+                        <option value="8 dan" {% if player.jodo == '8 dan' %}selected{% endif %}>8 dan</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+    </form>
+
+
+    
+{% endblock %}

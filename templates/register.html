@@ -7,12 +7,21 @@
         <h2 class="mb-4">Zarejestruj</h2>
 
         <form method="post" action="{{ url_for('register') }}">
+          <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="username" class="form-label">Podaj nazwę użytkownika:</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+        </div>
+
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <label for="username" class="form-label">Podaj email:</label>
+                    <label for="email" class="form-label">Podaj email:</label>
                 </div>
                 <div class="col-md-9">
-                    <input type="text" class="form-control" id="username" name="username" required>
+                    <input type="text" class="form-control" id="email" name="email" required>
                 </div>
             </div>
 
@@ -36,7 +45,7 @@
 
             <div class="row mb-3">
               <div class="col-md-3">
-                <label for="secretkey" class="form-label">Klucz klubu:</label>
+                <label for="secretkey" class="form-label">Podaj klucz klubu:</label>
               </div>
               <div class="col-md-9">
                 <input type="text" class="form-control" name="secretkey" id="secretkey" required>

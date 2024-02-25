@@ -3,21 +3,114 @@ from werkzeug.security import generate_password_hash
 from models import db, User, Club, Player
 from app import app, db
 import datetime
+from utils import parse_csv, parse_club_csv, get_playeriD
+
+
+def parse_users():
+    file = 'players.csv'
+    data = parse_csv(file)
+    users = []
+    for row in data[:33]:
+        # Ensure all required columns are present
+        if all(col in row for col in ['username', 'password', 'clubID', 'fname', 'surname']):
+            users.append(
+                User(
+                    username=row.get('username'),
+                    password=generate_password_hash(row.get('password')),
+                    parentID=row.get('parentID') if row.get('parentID') else None,
+                    clubID=row.get('clubID') if row.get('clubID') else None,
+                    leader=bool(row.get('leader')) if row.get('leader') else False,
+                    email=row.get('email') if row.get('email') else None,
+                    name=row.get('fname') if row.get('fname') else None,
+                    surname=row.get('surname') if row.get('surname') else None,
+                    phone=row.get('phone') if row.get('phone') else None,
+                    admin=row.get('admin') if row.get('admin') else 0,
+                )
+            )
+    db.session.bulk_save_objects(users)
+    db.session.commit()
+
+
+def parse_players():
+    file = 'players.csv'
+    data = parse_csv(file)
+    players = []
+    for idx, row in enumerate(data[:33]):
+        # Ensure all required columns are present
+        if all(col in row for col in ['name', 'clubID']):
+            players.append(
+                Player(
+                    userID=idx+1,
+                    name=row.get('name') if row.get('name') else None,
+                    student=bool(row.get('student')) if row.get('student') else False,
+                    club=row.get('clubID') if row.get('clubID') else None,
+                    licence=row.get('licence') if row.get('licence') else 0,
+                    title=row.get('title') if row.get('title') else 0,
+
+                    kendoshogo=row.get('kendoshogo') if row.get('kendoshogo') else 0, 
+                    kendo=row.get('kendo') if row.get('kendo') else None,
+                    kendolicence=datetime.datetime.strptime(row.get('kendolicence'), '%Y-%m-%d') if row.get('kendolicence') else None,
+                    kendolicencehistory=row.get('kendolicencehistory') if row.get('kendolicencehistory') else None,
+
+                    iaidoshogo=row.get('iaidoshogo') if row.get('iaidoshogo') else 0, 
+                    iaido=row.get('iaido') if row.get('iaido') else None,
+                    iaidolicence=datetime.datetime.strptime(row.get('iaidolicence'), '%Y-%m-%d') if row.get('iaidolicence') else None,
+                    iaidolicencehistory=row.get('iaidolicencehistory') if row.get('iaidolicencehistory') else None,
+
+                    jodoshogo=row.get('jodoshogo') if row.get('jodoshogo') else 0, 
+                    jodo=row.get('jodo') if row.get('jodo') else None,
+                    jodolicence=datetime.datetime.strptime(row.get('jodolicence'), '%Y-%m-%d') if row.get('jodolicence') else None,
+                    jodolicencehistory=row.get('jodolicencehistory') if row.get('jodolicencehistory') else None,
+
+                    leader=bool(row.get('leader')) if row.get('leader') else False,
+                    playeriD=get_playeriD(idx+1),
+                    instructor=row.get('instructor') if row.get('instructor') else None,
+                )
+            )
+    db.session.bulk_save_objects(players)
+    db.session.commit()
 
 
 def parse_clubs():
-    pass
+    file = 'clubs.csv'
+    clubs = parse_club_csv(file)
+    clubs = [
+        Club(
+            name=c.get('name', None),
+            abbrev=c.get('abbrev', None),
+            city=c.get('city', None),
+            club_key=c.get('club_key', None),
+            email=c.get('email', None),
+            licence=c.get('licence',datetime.datetime(2020, 1, 1, 0, 0)),
+            licencehistory=c.get('licencehistory',""),
+            art=int(c.get('art', 0)),
+        )
+        for c in clubs
+    ]
+    db.session.bulk_save_objects(clubs)
+    db.session.commit()
 
 
 def add_clubs():
     '''Add three examples of clubs to the database'''
     example_clubs = [
-        Club(name='PZK', city='Łódź', email='pzk@kendo.pl', club_key='pzklod'),
-        Club(name='Bumeikan', city='Katowice', email='pzk@bumeikan.pl', club_key='bumkat'),
-        Club(name='WSK', city='Wrocław', email='wiesiek@wsk.pl', club_key='wskwro'),
-        Club(name='WKK', city='Warszawa', email='boss@kendo.wawa.pl', club_key='wkkwar'),
+        Club(name='Polski Związek Kendo', abbrev='PZK', 
+             licence=datetime.datetime(2024, 1, 1, 0, 0),
+             licencehistory='2423222120',
+             city='Łódź', email='pzk@kendo.pl', club_key='pzklod'),
+        Club(name='Klub Sportowy Bumeikan', abbrev='Bumeikan', 
+             licence=datetime.datetime(2024, 1, 5, 18, 0),
+             licencehistory='242322212019181716151413121110090807',
+             city='Katowice', email='pzk@bumeikan.pl', club_key='bumkat'),
+        Club(name='Wrocławskie Stowarzyszenie Kendo', abbrev='WSK', 
+             licence=datetime.datetime(2024, 1, 1, 1, 0),
+             licencehistory='2423222120191817161514131211100908070605',
+             city='Wrocław', email='wiesiek@wsk.pl', club_key='wskwro'),
+        Club(name='Warszawski Klub Kendo', abbrev='WKK', city='Warszawa', 
+             licence=datetime.datetime(2024, 1, 12, 11, 12),
+             licencehistory='242322212019181716',
+             email='boss@kendo.wawa.pl', club_key='wkkwar'),
     ]
-
     db.session.bulk_save_objects(example_clubs)
     db.session.commit()
 
@@ -30,8 +123,9 @@ def create_example_users():
             email='user1@user.com',
             name='Useros',
             surname='Oneos',
-            rodo=datetime.datetime.now(),
+            # rodo=datetime.datetime.now(),
             clubID=3,
+            leader=True,
             ),
         User(username='tata1', 
             password=generate_password_hash('tata1'),
@@ -142,12 +236,15 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
 
-        add_clubs()
-        print('Example clubs added to the database.')
+        # add_clubs()
+        parse_clubs()
+        print('PZK clubs added to the database')
 
-        create_example_users()
-        print('Example users added to the database.')
+        # # create_example_users()
+        parse_users()
+        print('PZK users added to the database')
         
-        create_example_players()
-        print('Example players added to the database.')
+        # # create_example_players()
+        parse_players()
+        print('Example players added to the database')
         

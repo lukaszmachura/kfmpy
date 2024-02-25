@@ -12,9 +12,10 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100), nullable=False)
     parentID = db.Column(db.Integer)  # make this local reference
     clubID = db.Column(db.Integer)  # TODO make this club reference
+    leader = db.Column(db.Boolean, default=False)
 
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    name = db.Column(db.String(100))
+    email = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(100)) 
     surname = db.Column(db.String(100))
     phone = db.Column(db.String(50))
 
@@ -51,10 +52,17 @@ class Player(db.Model):
 
     name = db.Column(db.String(100))
     pesel = db.Column(db.String(11))
+    student = db.Column(db.Boolean, default=False)
     address = db.Column(db.String(50))
     club = db.Column(db.Integer)  # iD in Club table
 
     licence = db.Column(db.Integer, default=0)  # same as adminz
+    title = db.Column(db.Integer, default=0)
+    # 0 - zawodnik
+    # 1 - II klasa sportowa
+    # 2 - I klasa sportowa
+    # 3 - klasa mistrzowska
+    # 4 - klasa mistrzowska międzynarodowa
 
     # 1 - renshi, 2 - kyoshi, 3 - hanshi
     kendoshogo = db.Column(db.Integer, default=0) 
@@ -90,8 +98,13 @@ class Player(db.Model):
 
 
 class Club(db.Model):
+    '''club table model'''
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    abbrev = db.Column(db.String(100), nullable=False)
     city = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(120), nullable=True)    
+    email = db.Column(db.String(120), nullable=True)
     club_key = db.Column(db.String(30), unique=True, nullable=False)
+    licence = db.Column(db.DateTime)
+    licencehistory = db.Column(db.String(200))
+    art = db.Column(db.Integer, default=0) # same as admin

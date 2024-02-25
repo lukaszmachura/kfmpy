@@ -30,18 +30,18 @@
                         <td>
                             {% for c in clubs %}
                                 {% if c.id == p.club %}
-                                    {{ c.name }}
+                                    {{ c.abbrev }}
                                 {% endif %}
                             {% endfor %}
                         </td>
                         <td>{{ p.name }}</td>
-                        <td><span style="color: {% if p.kendolicence|is_older_than_one_year %}lightgray{% else %}black{% endif %}">{{ p.kendo }}</span></td>
-                        <td><span style="color: {% if p.iaidolicence|is_older_than_one_year %}lightgray{% else %}black{% endif %}">{{ p.iaido }}</span></td>
-                        <td><span style="color: {% if p.jodolicence|is_older_than_one_year %}lightgray{% else %}black{% endif %}">{{ p.jodo }}</span></td>
+                        <td><span style="color: {% if p.kendolicence|is_older_than_one_year %}lightgray{% else %}black{% endif %}">{{ p.kendoshogo|shogo }} {{ p.kendo|dan }}</span></td>
+                        <td><span style="color: {% if p.iaidolicence|is_older_than_one_year %}lightgray{% else %}black{% endif %}">{{ p.iaidoshogo|shogo }} {{ p.iaido|dan }}</span></td>
+                        <td><span style="color: {% if p.jodolicence|is_older_than_one_year %}lightgray{% else %}black{% endif %}">{{ p.jodoshogo|shogo }} {{ p.jodo|dan }}</span></td>
                         <td>{% if p.instructor %}Tak{% endif %}</td>
                         <td>
                             {% if user.is_authenticated and user.admin %}
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#editModal{{ p.id }}">
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal{{ p.id }}">
                                 Edycja
                             </button>
                             <!-- Modal -->
@@ -68,26 +68,34 @@
                                                     <select class="form-control" id="newKendo" name="newKendo" required>
                                                         <option value="" disabled>podaj stopień</option>
                                                         <option value="" {% if p.kendo == '' %}selected{% endif %}>brak</option>
-                                                        <option value="8 kyu" {% if p.kendo == '8 kyu' %}selected{% endif %}>8 kyu</option>
-                                                        <option value="7 kyu" {% if p.kendo == '7 kyu' %}selected{% endif %}>7 kyu</option>
-                                                        <option value="6 kyu" {% if p.kendo == '6 kyu' %}selected{% endif %}>6 kyu</option>
-                                                        <option value="5 kyu" {% if p.kendo == '5 kyu' %}selected{% endif %}>5 kyu</option>
-                                                        <option value="4 kyu" {% if p.kendo == '4 kyu' %}selected{% endif %}>4 kyu</option>
-                                                        <option value="3 kyu" {% if p.kendo == '3 kyu' %}selected{% endif %}>3 kyu</option>
-                                                        <option value="2 kyu" {% if p.kendo == '2 kyu' %}selected{% endif %}>2 kyu</option>
-                                                        <option value="1 kyu" {% if p.kendo == '1 kyu' %}selected{% endif %}>1 kyu</option>
-                                                        <option value="1 dan" {% if p.kendo == '1 dan' %}selected{% endif %}>1 dan</option>
-                                                        <option value="2 dan" {% if p.kendo == '2 dan' %}selected{% endif %}>2 dan</option>
-                                                        <option value="3 dan" {% if p.kendo == '3 dan' %}selected{% endif %}>3 dan</option>
-                                                        <option value="4 dan" {% if p.kendo == '4 dan' %}selected{% endif %}>4 dan</option>
-                                                        <option value="5 dan" {% if p.kendo == '5 dan' %}selected{% endif %}>5 dan</option>
-                                                        <option value="6 dan" {% if p.kendo == '6 dan' %}selected{% endif %}>6 dan</option>
-                                                        <option value="7 dan" {% if p.kendo == '7 dan' %}selected{% endif %}>7 dan</option>
-                                                        <option value="8 dan" {% if p.kendo == '8 dan' %}selected{% endif %}>8 dan</option>
+                                                        <option value=-8 {% if p.kendo == '-8' %}selected{% endif %}>8 kyu</option>
+                                                        <option value=-7 {% if p.kendo == '-7' %}selected{% endif %}>7 kyu</option>
+                                                        <option value=-6 {% if p.kendo == '-6' %}selected{% endif %}>6 kyu</option>
+                                                        <option value=-5 {% if p.kendo == '-5' %}selected{% endif %}>5 kyu</option>
+                                                        <option value=-4 {% if p.kendo == '-4' %}selected{% endif %}>4 kyu</option>
+                                                        <option value=-3 {% if p.kendo == '-3' %}selected{% endif %}>3 kyu</option>
+                                                        <option value=-2 {% if p.kendo == '-2' %}selected{% endif %}>2 kyu</option>
+                                                        <option value=-1 {% if p.kendo == '-1' %}selected{% endif %}>1 kyu</option>
+                                                        <option value=1 {% if p.kendo == '1' %}selected{% endif %}>1 dan</option>
+                                                        <option value=2 {% if p.kendo == '2' %}selected{% endif %}>2 dan</option>
+                                                        <option value=3 {% if p.kendo == '3' %}selected{% endif %}>3 dan</option>
+                                                        <option value=4 {% if p.kendo == '4' %}selected{% endif %}>4 dan</option>
+                                                        <option value=5 {% if p.kendo == '5' %}selected{% endif %}>5 dan</option>
+                                                        <option value=6 {% if p.kendo == '6' %}selected{% endif %}>6 dan</option>
+                                                        <option value=7 {% if p.kendo == '7' %}selected{% endif %}>7 dan</option>
+                                                        <option value=8 {% if p.kendo == '8' %}selected{% endif %}>8 dan</option>
                                                     </select>
                                                     <label for="kdatepicker{{p.id}}">Data opłacenia licencji</label>
                                                     <input type="text" id="kdatepicker{{ p.id }}" class="form-control" name="kendolicence" 
                                                            value="{{ p.kendolicence.strftime('%Y-%m-%d') if p.kendolicence }}">
+                                                    <label for="kendoshogo">Tytuł shogo</label>
+                                                    <select class="form-control" id="kendoshogo" name="kendoshogo" required>
+                                                        <option value="" disabled>Tytuł shogo</option>
+                                                        <option value=0 {% if p.kendoshogo == 0 %}selected{% endif %}>brak</option>
+                                                        <option value=1 {% if p.kendoshogo == 1 %}selected{% endif %}>renshi</option>
+                                                        <option value=2 {% if p.kendoshogo == 2 %}selected{% endif %}>kyoshi</option>
+                                                        <option value=3 {% if p.kendoshogo == 3 %}selected{% endif %}>hanshi</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,23 +112,31 @@
                                                             <select class="form-control" id="newIaido" name="newIaido" required>
                                                                 <option value="" disabled>Nowy stopień</option>
                                                                 <option value="" {% if p.iaido == "" %}selected{% endif %}>brak</option>
-                                                                <option value="5 kyu" {% if p.iaido == '5 kyu' %}selected{% endif %}>5 kyu</option>
-                                                                <option value="4 kyu" {% if p.iaido == '4 kyu' %}selected{% endif %}>4 kyu</option>
-                                                                <option value="3 kyu" {% if p.iaido == '3 kyu' %}selected{% endif %}>3 kyu</option>
-                                                                <option value="2 kyu" {% if p.iaido == '2 kyu' %}selected{% endif %}>2 kyu</option>
-                                                                <option value="1 kyu" {% if p.iaido == "1 kyu" %}selected{% endif %}>1 kyu</option>
-                                                                <option value="1 dan" {% if p.iaido == '1 dan' %}selected{% endif %}>1 dan</option>
-                                                                <option value="2 dan" {% if p.iaido == '2 dan' %}selected{% endif %}>2 dan</option>
-                                                                <option value="3 dan" {% if p.iaido == '3 dan' %}selected{% endif %}>3 dan</option>
-                                                                <option value="4 dan" {% if p.iaido == '4 dan' %}selected{% endif %}>4 dan</option>
-                                                                <option value="5 dan" {% if p.iaido == '5 dan' %}selected{% endif %}>5 dan</option>
-                                                                <option value="6 dan" {% if p.iaido == '6 dan' %}selected{% endif %}>6 dan</option>
-                                                                <option value="7 dan" {% if p.iaido == '7 dan' %}selected{% endif %}>7 dan</option>
-                                                                <option value="8 dan" {% if p.iaido == '8 dan' %}selected{% endif %}>8 dan</option>
+                                                                <option value="-5" {% if p.iaido == '-5' %}selected{% endif %}>5 kyu</option>
+                                                                <option value="-4" {% if p.iaido == '-4' %}selected{% endif %}>4 kyu</option>
+                                                                <option value="-3" {% if p.iaido == '-3' %}selected{% endif %}>3 kyu</option>
+                                                                <option value="-2" {% if p.iaido == '-2' %}selected{% endif %}>2 kyu</option>
+                                                                <option value="-1" {% if p.iaido == "-1" %}selected{% endif %}>1 kyu</option>
+                                                                <option value="1" {% if p.iaido == '1' %}selected{% endif %}>1 dan</option>
+                                                                <option value="2" {% if p.iaido == '2' %}selected{% endif %}>2 dan</option>
+                                                                <option value="3" {% if p.iaido == '3' %}selected{% endif %}>3 dan</option>
+                                                                <option value="4" {% if p.iaido == '4' %}selected{% endif %}>4 dan</option>
+                                                                <option value="5" {% if p.iaido == '5' %}selected{% endif %}>5 dan</option>
+                                                                <option value="6" {% if p.iaido == '6' %}selected{% endif %}>6 dan</option>
+                                                                <option value="7" {% if p.iaido == '7' %}selected{% endif %}>7 dan</option>
+                                                                <option value="8" {% if p.iaido == '8' %}selected{% endif %}>8 dan</option>
                                                             </select>
                                                             <label for="idatepicker{{p.id}}">Data opłacenia licencji</label>
                                                             <input type="text" id="idatepicker{{ p.id }}" class="form-control" name="iaidolicence" 
                                                                 value="{{ p.iaidolicence.strftime('%Y-%m-%d') if p.iaidolicence }}">
+                                                            <label for="iaidoshogo">Tytuł shogo</label>
+                                                            <select class="form-control" id="iaidoshogo" name="iaidoshogo" required>
+                                                                <option value="" disabled>Tytuł shogo</option>
+                                                                <option value=0 {% if p.iaidoshogo == 0 %}selected{% endif %}>brak</option>
+                                                                <option value=1 {% if p.iaidoshogo == 1 %}selected{% endif %}>renshi</option>
+                                                                <option value=2 {% if p.iaidoshogo == 2 %}selected{% endif %}>kyoshi</option>
+                                                                <option value=3 {% if p.iaidoshogo == 3 %}selected{% endif %}>hanshi</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -137,23 +153,32 @@
                                                             <select class="form-control" id="newJodo" name="newJodo" required>
                                                                 <option value="" disabled>Nowy stopień</option>
                                                                 <option value="" {% if p.jodo == "" %}selected{% endif %}>brak</option>
-                                                                <option value="5 kyu" {% if p.jodo == '5 kyu' %}selected{% endif %}>5 kyu</option>
-                                                                <option value="4 kyu" {% if p.jodo == '4 kyu' %}selected{% endif %}>4 kyu</option>
-                                                                <option value="3 kyu" {% if p.jodo == '3 kyu' %}selected{% endif %}>3 kyu</option>
-                                                                <option value="2 kyu" {% if p.jodo == '2 kyu' %}selected{% endif %}>2 kyu</option>
-                                                                <option value="1 kyu" {% if p.jodo == "1 kyu" %}selected{% endif %}>1 kyu</option>
-                                                                <option value="1 dan" {% if p.jodo == '1 dan' %}selected{% endif %}>1 dan</option>
-                                                                <option value="2 dan" {% if p.jodo == '2 dan' %}selected{% endif %}>2 dan</option>
-                                                                <option value="3 dan" {% if p.jodo == '3 dan' %}selected{% endif %}>3 dan</option>
-                                                                <option value="4 dan" {% if p.jodo == '4 dan' %}selected{% endif %}>4 dan</option>
-                                                                <option value="5 dan" {% if p.jodo == '5 dan' %}selected{% endif %}>5 dan</option>
-                                                                <option value="6 dan" {% if p.jodo == '6 dan' %}selected{% endif %}>6 dan</option>
-                                                                <option value="7 dan" {% if p.jodo == '7 dan' %}selected{% endif %}>7 dan</option>
-                                                                <option value="8 dan" {% if p.jodo == '8 dan' %}selected{% endif %}>8 dan</option>
+                                                                <option value="-5" {% if p.jodo == '-5' %}selected{% endif %}>5 kyu</option>
+                                                                <option value="-4" {% if p.jodo == '-4' %}selected{% endif %}>4 kyu</option>
+                                                                <option value="-3" {% if p.jodo == '-3' %}selected{% endif %}>3 kyu</option>
+                                                                <option value="-2" {% if p.jodo == '-2' %}selected{% endif %}>2 kyu</option>
+                                                                <option value="-1" {% if p.jodo == "-1" %}selected{% endif %}>1 kyu</option>
+                                                                <option value="1" {% if p.jodo == '1' %}selected{% endif %}>1 dan</option>
+                                                                <option value="2" {% if p.jodo == '2' %}selected{% endif %}>2 dan</option>
+                                                                <option value="3" {% if p.jodo == '3' %}selected{% endif %}>3 dan</option>
+                                                                <option value="4" {% if p.jodo == '4' %}selected{% endif %}>4 dan</option>
+                                                                <option value="5" {% if p.jodo == '5' %}selected{% endif %}>5 dan</option>
+                                                                <option value="6" {% if p.jodo == '6' %}selected{% endif %}>6 dan</option>
+                                                                <option value="7" {% if p.jodo == '7' %}selected{% endif %}>7 dan</option>
+                                                                <option value="8" {% if p.jodo == '8' %}selected{% endif %}>8 dan</option>
                                                             </select>
                                                             <label for="jdatepicker{{p.id}}">Data opłacenia licencji</label>
                                                             <input type="text" id="jdatepicker{{ p.id }}" class="form-control" name="jodolicence" 
                                                                 value="{{ p.jodolicence.strftime('%Y-%m-%d') if p.jodolicence }}">
+
+                                                                <label for="jodoshogo">Tytuł shogo</label>
+                                                                <select class="form-control" id="jodoshogo" name="jodoshogo" required>
+                                                                    <option value="" disabled>Tytuł shogo</option>
+                                                                    <option value=0 {% if p.jodoshogo == 0 %}selected{% endif %}>brak</option>
+                                                                    <option value=1 {% if p.jodoshogo == 1 %}selected{% endif %}>renshi</option>
+                                                                    <option value=2 {% if p.jodoshogo == 2 %}selected{% endif %}>kyoshi</option>
+                                                                    <option value=3 {% if p.jodoshogo == 3 %}selected{% endif %}>hanshi</option>
+                                                                </select>
                                                         </div>
                                                     </div>
                                                 </div>

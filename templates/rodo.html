@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}RODO PZK{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="mb-4">RODO PZK</h2>
+
+        {% if agreement %}
+        <p>Warunki RODO PZK zaakceptowane</p>
+        {% else %}
+        <form method="post" action="{{ url_for('rodo') }}">
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="rodo" name="rodo" data-val="true" and value="true" required>
+                <label class="form-check-label" for="rodo">
+                  <span class="text-danger">*</span>
+                  Wyrażam zgodę na przetwarzanie danych osobowych przez Polski Związek Kendo z siedzibą w Łodzi, 
+                  ul. Zgierska 73 pok. 410, na potrzeby mojego uczestnictwa w szkoleniach, zawodach oraz innych 
+                  przewidzianych statutem formach działalności wspieranych przez Polski Związek Kendo.
+                </label>
+                <p class="mt-3">Informujemy, że Państwa zgoda może zostać cofnięta w dowolnym momencie przez wysłanie wiadomości e-mail na adres 
+                  Administratora Danych Osobowych (kendo@kendo.pl) spod adresu, którego zgoda dotyczy. Informujemy, że nie jesteście 
+                  Państwo profilowani. Państwa dane nie będą przekazywane poza PZK ani udostępniane organizacjom międzynarodowym. </p>
+                <p class="mt-3">Wycofanie zgody wiąże się z likwidacją konta w tym serwisie.</p>
+                </div>
+
+            <button type="submit" class="btn btn-primary">Tak</button>
+        </form>
+        {% endif %}
+    </div>
+{% endblock %}
+

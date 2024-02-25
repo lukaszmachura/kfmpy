@@ -2,7 +2,7 @@
 
 {% extends 'base.html' %}
 
-{% block title %}Kluby zrzeszone w PZK{% endblock %}
+{% block title %}Kluby PZK{% endblock %}
 
 {% block content %}
     <h2>Kluby PZK</h2>
@@ -14,9 +14,20 @@
                     <th>Lp</th>
                     <th>Klub</th>
                     <th>Miasto</th>
-                    <th>Kontakt</th>
-                    {% if current_user.is_authenticated and current_user.admin %}
-                        <th>Sekretny klucz</th>
+                    <th>Dyscyplina</th>
+                    <th>Licencja</th>
+                    {% if current_user.is_authenticated %} 
+                        {% 
+                            if current_user.admin 
+                            or 
+                            current_user.leader 
+                        %}
+                            <th>Skrót</th>
+                            <th>Kontakt</th>
+                            <th>Klucz</th>
+                            <th>Historia</th>
+                            <th>Akcja</th>
+                        {% endif %}
                     {% endif %}
                 </tr>
             </thead>
@@ -26,9 +37,38 @@
                         <td>{{ club.id }}</td>
                         <td>{{ club.name }}</td>
                         <td>{{ club.city }}</td>
-                        <td>{{ club.email }}</td>
-                        {% if current_user.is_authenticated and current_user.admin %}
-                            <td>{{ club.club_key }}</td>
+                        <td>
+                            {% if club.art >= 4 %}<button type="button" class="btn btn-primary btn-sm" disabled>K</button>{% endif %}
+                            {% if club.art in [2, 3, 6, 7] %}<button type="button" class="btn btn-dark btn-sm" disabled>I</button>{% endif %}
+                            {% if club.art in [1, 3, 5, 7] %}<button type="button" class="btn btn-danger btn-sm" disabled>J</button>{% endif %}
+                        </td>
+                        <td>
+                            {% if club.licence|is_older_than_one_year %}
+                            <button type="button" class="btn btn-outline-danger btn-sm" disabled>
+                                Zawieszona
+                            {% else %}
+                            <button type="button" class="btn btn-outline-primary btn-sm" disabled>
+                                Aktywna
+                            {% endif %}
+                            </button>
+                        </td>
+                        
+                        {% if current_user.is_authenticated %} 
+                            <td>{{ club.abbrev }}</td>
+                            <td>{{ club.email }}</td>
+                            {% 
+                                if current_user.admin 
+                                or 
+                                ((current_user.clubID == club.id) and (current_user.leader)) 
+                            %}
+                                
+                                
+                                <td>{{ club.club_key }}</td>
+                                <td>{{ club.licencehistory }}</td>
+                                <td><a type="button" class="btn btn-primary btn-sm">Edytuj</a></td>
+                            {% else %}
+                                <td>...</td><td>...</td><td>...</td>
+                            {% endif %}
                         {% endif %}
                     </tr>
                 {% endfor %}

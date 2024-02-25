@@ -1,7 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user 
-#, UserMixin
-# from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Club, Player
 from functools import wraps
@@ -55,10 +53,30 @@ def is_younger_than_one_year(date):
         return False
     return not is_older_than_one_year(date)
 
+def dan(g):
+    if g == None:
+        return ''
+    g = int(g)
+    if g > 0:
+        return f'{g} dan'
+    else:
+        return f'{-g} kyu'
+
+def shogo(g):
+    g = int(g)
+    if g == 1:
+        return 'Renshi'
+    elif g == 2:
+        return 'Kyoshi'
+    elif g == 3:
+        return 'Hanshi'
+    return ''
+
 # Register the filter with Jinja2
 app.jinja_env.filters['is_older_than_one_year'] = is_older_than_one_year
 app.jinja_env.filters['is_younger_than_one_year'] = is_younger_than_one_year
-
+app.jinja_env.filters['dan'] = dan
+app.jinja_env.filters['shogo'] = shogo
 
 # Routes
 @app.route('/')
@@ -79,6 +97,9 @@ def login():
             login_user(user)
             flash('Login successful!', 'success')
 
+            if not user.rodo:
+                return redirect(url_for('rodo'))
+
             if not user.coc:
                 return redirect(url_for('coc'))
 
@@ -95,6 +116,24 @@ def logout():
     logout_user()
     flash('Logout successful!', 'success')
     return redirect(url_for('home'))
+
+
+@app.route('/rodo', methods=['GET', 'POST'])
+@login_required
+def rodo():
+    if request.method == 'POST':
+        rodo = request.form['rodo']
+        
+        if rodo == 'true':
+            current_user.rodo = datetime.datetime.now()
+            db.session.commit()
+            flash('Dziękujemy za zgodę na RODO.', 'success')
+            return redirect(url_for('coc'))
+        else:
+            flash('Nie można założyć konta, wymagana zgoda na RODO.', 'error')
+            return redirect(url_for('logout'))
+
+    return render_template('rodo.html', agreement=current_user.rodo)
 
 
 @app.route('/coc', methods=['GET', 'POST'])
@@ -123,6 +162,10 @@ def register():
         password = request.form['password']
         key = request.form['secretkey']
         rodo = datetime.datetime.now() if request.form['rodo'] == 'true' else False
+
+        if not rodo:
+            flash('Nie można założyć konta, wymagana zgoda na RODO.', 'error')
+            return redirect(url_for('logout'))
 
         # TODO:
         #   - check id password and confirm_password agree
@@ -293,10 +336,21 @@ def edit_player(id):
             player.iaidolicence = datetime.datetime.strptime(iaidolicence, '%Y-%m-%d')
 
         jodolicence = request.form.get('jodolicence')
-        print('jodolicence', jodolicence)
         if jodolicence:
             player.jodolicence = datetime.datetime.strptime(jodolicence, '%Y-%m-%d')
-    
+
+        kendoshogo = request.form.get('kendoshogo')
+        if kendoshogo:
+            player.kendoshogo = int(kendoshogo)
+            
+        iaidoshogo = request.form.get('iaidoshogo')
+        if iaidoshogo:
+            player.iaidoshogo = int(iaidoshogo)
+        
+        jodoshogo = request.form.get('jodoshogo')
+        if jodoshogo:
+            player.jodoshogo = int(jodoshogo)
+
         db.session.commit()
         return redirect(url_for('players'))
     return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())

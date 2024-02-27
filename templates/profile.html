@@ -81,7 +81,7 @@
                 {% elif player.kendoshogo == 2 %}Kyoshi
                 {% elif player.kendoshogo == 3 %}Hanshi
                 {% endif %}
-                {{ player.kendo }}
+                {{ player.kendo|dan }}
             </dd>
         {% endif %}
         {% if player.iaido %}
@@ -91,7 +91,7 @@
                 {% elif player.iaidoshogo == 2 %}Kyoshi
                 {% elif player.iaidoshogo == 3 %}Hanshi
                 {% endif %}
-                {{ player.iaido }}
+                {{ player.iaido|dan }}
             </dd>
         {% endif %}
         {% if player.jodo %}
@@ -101,7 +101,7 @@
                 {% elif player.jodoshogo == 2 %}Kyoshi
                 {% elif player.jodoshogo == 3 %}Hanshi
                 {% endif %}
-                {{ player.jodo }}
+                {{ player.jodo|dan }}
             </dd>
         {% endif %}
         {% if player.leader %}

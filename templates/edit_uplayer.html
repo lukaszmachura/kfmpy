@@ -75,23 +75,23 @@
                 <div class="col-md-9">
                     <select class="form-control" id="kendo" name="kendo" required>
                         <option value="" disabled>podaj stopień</option>
-                        <option value="" {% if player.kendo == '' %}selected{% endif %}>brak stopnia</option>
-                        <option value="8 kyu" {% if player.kendo == '8 kyu' %}selected{% endif %}>8 kyu</option>
-                        <option value="7 kyu" {% if player.kendo == '7 kyu' %}selected{% endif %}>7 kyu</option>
-                        <option value="6 kyu" {% if player.kendo == '6 kyu' %}selected{% endif %}>6 kyu</option>
-                        <option value="5 kyu" {% if player.kendo == '5 kyu' %}selected{% endif %}>5 kyu</option>
-                        <option value="4 kyu" {% if player.kendo == '4 kyu' %}selected{% endif %}>4 kyu</option>
-                        <option value="3 kyu" {% if player.kendo == '3 kyu' %}selected{% endif %}>3 kyu</option>
-                        <option value="2 kyu" {% if player.kendo == '2 kyu' %}selected{% endif %}>2 kyu</option>
-                        <option value="1 kyu" {% if player.kendo == '1 kyu' %}selected{% endif %}>1 kyu</option>
-                        <option value="1 dan" {% if player.kendo == '1 dan' %}selected{% endif %}>1 dan</option>
-                        <option value="2 dan" {% if player.kendo == '2 dan' %}selected{% endif %}>2 dan</option>
-                        <option value="3 dan" {% if player.kendo == '3 dan' %}selected{% endif %}>3 dan</option>
-                        <option value="4 dan" {% if player.kendo == '4 dan' %}selected{% endif %}>4 dan</option>
-                        <option value="5 dan" {% if player.kendo == '5 dan' %}selected{% endif %}>5 dan</option>
-                        <option value="6 dan" {% if player.kendo == '6 dan' %}selected{% endif %}>6 dan</option>
-                        <option value="7 dan" {% if player.kendo == '7 dan' %}selected{% endif %}>7 dan</option>
-                        <option value="8 dan" {% if player.kendo == '8 dan' %}selected{% endif %}>8 dan</option>
+                        <option value=0 {% if player.kendo == 0 %}selected{% endif %}>brak</option>
+                        <option value=-8 {% if player.kendo == -8 %}selected{% endif %}>8 kyu</option>
+                        <option value=-7 {% if player.kendo == -7 %}selected{% endif %}>7 kyu</option>
+                        <option value=-6 {% if player.kendo == -6 %}selected{% endif %}>6 kyu</option>
+                        <option value=-5 {% if player.kendo == -5 %}selected{% endif %}>5 kyu</option>
+                        <option value=-4 {% if player.kendo == -4 %}selected{% endif %}>4 kyu</option>
+                        <option value=-3 {% if player.kendo == -3 %}selected{% endif %}>3 kyu</option>
+                        <option value=-2 {% if player.kendo == -2 %}selected{% endif %}>2 kyu</option>
+                        <option value=-1 {% if player.kendo == -1 %}selected{% endif %}>1 kyu</option>
+                        <option value=1 {% if player.kendo == 1 %}selected{% endif %}>1 dan</option>
+                        <option value=2 {% if player.kendo == 2 %}selected{% endif %}>2 dan</option>
+                        <option value=3 {% if player.kendo == 3 %}selected{% endif %}>3 dan</option>
+                        <option value=4 {% if player.kendo == 4 %}selected{% endif %}>4 dan</option>
+                        <option value=5 {% if player.kendo == 5 %}selected{% endif %}>5 dan</option>
+                        <option value=6 {% if player.kendo == 6 %}selected{% endif %}>6 dan</option>
+                        <option value=7 {% if player.kendo == 7 %}selected{% endif %}>7 dan</option>
+                        <option value=8 {% if player.kendo == 8 %}selected{% endif %}>8 dan</option>
                     </select>
                 </div>
             </div>
@@ -121,21 +121,21 @@
                 </div>
                 <div class="col-md-9">  
                     <select class="form-control" id="iaido" name="iaido" required>
-                        <option value="" disabled>podaj stopień</option>
-                        <option value="" {% if player.iaido == '' %}selected{% endif %}>brak stopnia</option>
-                        <option value="5 kyu" {% if player.iaido == '5 kyu' %}selected{% endif %}>5 kyu</option>
-                        <option value="4 kyu" {% if player.iaido == '4 kyu' %}selected{% endif %}>4 kyu</option>
-                        <option value="3 kyu" {% if player.iaido == '3 kyu' %}selected{% endif %}>3 kyu</option>
-                        <option value="2 kyu" {% if player.iaido == '2 kyu' %}selected{% endif %}>2 kyu</option>
-                        <option value="1 kyu" {% if player.iaido == '1 kyu' %}selected{% endif %}>1 kyu</option>
-                        <option value="1 dan" {% if player.iaido == '1 dan' %}selected{% endif %}>1 dan</option>
-                        <option value="2 dan" {% if player.iaido == '2 dan' %}selected{% endif %}>2 dan</option>
-                        <option value="3 dan" {% if player.iaido == '3 dan' %}selected{% endif %}>3 dan</option>
-                        <option value="4 dan" {% if player.iaido == '4 dan' %}selected{% endif %}>4 dan</option>
-                        <option value="5 dan" {% if player.iaido == '5 dan' %}selected{% endif %}>5 dan</option>
-                        <option value="6 dan" {% if player.iaido == '6 dan' %}selected{% endif %}>6 dan</option>
-                        <option value="7 dan" {% if player.iaido == '7 dan' %}selected{% endif %}>7 dan</option>
-                        <option value="8 dan" {% if player.iaido == '8 dan' %}selected{% endif %}>8 dan</option>
+                        <option value="" disabled>Nowy stopień</option>
+                        <option value=0 {% if player.iaido == 0 %}selected{% endif %}>brak</option>
+                        <option value=-5 {% if player.iaido == -5 %}selected{% endif %}>5 kyu</option>
+                        <option value=-4 {% if player.iaido == -4 %}selected{% endif %}>4 kyu</option>
+                        <option value=-3 {% if player.iaido == -3 %}selected{% endif %}>3 kyu</option>
+                        <option value=-2 {% if player.iaido == -2 %}selected{% endif %}>2 kyu</option>
+                        <option value=-1 {% if player.iaido == -1 %}selected{% endif %}>1 kyu</option>
+                        <option value=1 {% if player.iaido == 1 %}selected{% endif %}>1 dan</option>
+                        <option value=2 {% if player.iaido == 2 %}selected{% endif %}>2 dan</option>
+                        <option value=3 {% if player.iaido == 3 %}selected{% endif %}>3 dan</option>
+                        <option value=4 {% if player.iaido == 4 %}selected{% endif %}>4 dan</option>
+                        <option value=5 {% if player.iaido == 5 %}selected{% endif %}>5 dan</option>
+                        <option value=6 {% if player.iaido == 6 %}selected{% endif %}>6 dan</option>
+                        <option value=7 {% if player.iaido == 7 %}selected{% endif %}>7 dan</option>
+                        <option value=8 {% if player.iaido == 8 %}selected{% endif %}>8 dan</option>
                     </select>
                 </div>
             </div>
@@ -165,21 +165,21 @@
                 </div>
                 <div class="col-md-9">
                     <select class="form-control" id="jodo" name="jodo" required>
-                        <option value="" disabled>podaj stopień</option>
-                        <option value="" {% if player.jodo == "" %}selected{% endif %}>brak stopnia</option>
-                        <option value="5 kyu" {% if player.jodo == '5 kyu' %}selected{% endif %}>5 kyu</option>
-                        <option value="4 kyu" {% if player.jodo == '4 kyu' %}selected{% endif %}>4 kyu</option>
-                        <option value="3 kyu" {% if player.jodo == '3 kyu' %}selected{% endif %}>3 kyu</option>
-                        <option value="2 kyu" {% if player.jodo == '2 kyu' %}selected{% endif %}>2 kyu</option>
-                        <option value="1 kyu" {% if player.jodo == "1 kyu" %}selected{% endif %}>1 kyu</option>
-                        <option value="1 dan" {% if player.jodo == '1 dan' %}selected{% endif %}>1 dan</option>
-                        <option value="2 dan" {% if player.jodo == '2 dan' %}selected{% endif %}>2 dan</option>
-                        <option value="3 dan" {% if player.jodo == '3 dan' %}selected{% endif %}>3 dan</option>
-                        <option value="4 dan" {% if player.jodo == '4 dan' %}selected{% endif %}>4 dan</option>
-                        <option value="5 dan" {% if player.jodo == '5 dan' %}selected{% endif %}>5 dan</option>
-                        <option value="6 dan" {% if player.jodo == '6 dan' %}selected{% endif %}>6 dan</option>
-                        <option value="7 dan" {% if player.jodo == '7 dan' %}selected{% endif %}>7 dan</option>
-                        <option value="8 dan" {% if player.jodo == '8 dan' %}selected{% endif %}>8 dan</option>
+                        <option value="" disabled>Nowy stopień</option>
+                            <option value=0 {% if player.jodo == 0 %}selected{% endif %}>brak</option>
+                            <option value=-5 {% if player.jodo == -5 %}selected{% endif %}>5 kyu</option>
+                            <option value=-4 {% if player.jodo == -4 %}selected{% endif %}>4 kyu</option>
+                            <option value=-3 {% if player.jodo == -3 %}selected{% endif %}>3 kyu</option>
+                            <option value=-2 {% if player.jodo == -2 %}selected{% endif %}>2 kyu</option>
+                            <option value=-1 {% if player.jodo == -1 %}selected{% endif %}>1 kyu</option>
+                            <option value=1 {% if player.jodo == 1 %}selected{% endif %}>1 dan</option>
+                            <option value=2 {% if player.jodo == 2 %}selected{% endif %}>2 dan</option>
+                            <option value=3 {% if player.jodo == 3 %}selected{% endif %}>3 dan</option>
+                            <option value=4 {% if player.jodo == 4 %}selected{% endif %}>4 dan</option>
+                            <option value=5 {% if player.jodo == 5 %}selected{% endif %}>5 dan</option>
+                            <option value=6 {% if player.jodo == 6 %}selected{% endif %}>6 dan</option>
+                            <option value=7 {% if player.jodo == 7 %}selected{% endif %}>7 dan</option>
+                            <option value=8 {% if player.jodo == 8 %}selected{% endif %}>8 dan</option>
                     </select>
                 </div>
             </div>

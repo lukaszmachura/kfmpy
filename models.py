@@ -66,17 +66,17 @@ class Player(db.Model):
 
     # 1 - renshi, 2 - kyoshi, 3 - hanshi
     kendoshogo = db.Column(db.Integer, default=0) 
-    kendo = db.Column(db.String(50))
+    kendo = db.Column(db.Integer, default=0) 
     kendolicence = db.Column(db.DateTime)
     kendolicencehistory = db.Column(db.String(200))
 
     iaidoshogo = db.Column(db.Integer, default=0)
-    iaido = db.Column(db.String(50))
+    iaido = db.Column(db.Integer, default=0) 
     iaidolicence = db.Column(db.DateTime)
     iaidolicencehistory = db.Column(db.String(200))
 
     jodoshogo = db.Column(db.Integer, default=0)
-    jodo = db.Column(db.String(50))
+    jodo = db.Column(db.Integer, default=0) 
     jodolicence = db.Column(db.DateTime)
     jodolicencehistory = db.Column(db.String(200))
 

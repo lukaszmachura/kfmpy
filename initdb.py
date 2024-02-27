@@ -10,7 +10,7 @@ def parse_users():
     file = 'players.csv'
     data = parse_csv(file)
     users = []
-    for row in data[:33]:
+    for row in data[:77]:
         # Ensure all required columns are present
         if all(col in row for col in ['username', 'password', 'clubID', 'fname', 'surname']):
             users.append(
@@ -35,7 +35,7 @@ def parse_players():
     file = 'players.csv'
     data = parse_csv(file)
     players = []
-    for idx, row in enumerate(data[:33]):
+    for idx, row in enumerate(data[:77]):
         # Ensure all required columns are present
         if all(col in row for col in ['name', 'clubID']):
             players.append(
@@ -48,17 +48,17 @@ def parse_players():
                     title=row.get('title') if row.get('title') else 0,
 
                     kendoshogo=row.get('kendoshogo') if row.get('kendoshogo') else 0, 
-                    kendo=row.get('kendo') if row.get('kendo') else None,
+                    kendo=row.get('kendo') if row.get('kendo') else 0,
                     kendolicence=datetime.datetime.strptime(row.get('kendolicence'), '%Y-%m-%d') if row.get('kendolicence') else None,
                     kendolicencehistory=row.get('kendolicencehistory') if row.get('kendolicencehistory') else None,
 
                     iaidoshogo=row.get('iaidoshogo') if row.get('iaidoshogo') else 0, 
-                    iaido=row.get('iaido') if row.get('iaido') else None,
+                    iaido=row.get('iaido') if row.get('iaido') else 0,
                     iaidolicence=datetime.datetime.strptime(row.get('iaidolicence'), '%Y-%m-%d') if row.get('iaidolicence') else None,
                     iaidolicencehistory=row.get('iaidolicencehistory') if row.get('iaidolicencehistory') else None,
 
                     jodoshogo=row.get('jodoshogo') if row.get('jodoshogo') else 0, 
-                    jodo=row.get('jodo') if row.get('jodo') else None,
+                    jodo=row.get('jodo') if row.get('jodo') else 0,
                     jodolicence=datetime.datetime.strptime(row.get('jodolicence'), '%Y-%m-%d') if row.get('jodolicence') else None,
                     jodolicencehistory=row.get('jodolicencehistory') if row.get('jodolicencehistory') else None,
 

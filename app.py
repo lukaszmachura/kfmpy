@@ -59,8 +59,10 @@ def dan(g):
     g = int(g)
     if g > 0:
         return f'{g} dan'
-    else:
+    elif g < 0:
         return f'{-g} kyu'
+    else:
+        return ''
 
 def shogo(g):
     g = int(g)
@@ -374,15 +376,15 @@ def edit_uplayer():
         if isinstance(current_user.surname, str):
             name += " " + current_user.surname
         
-        new_kendo = request.form.get('kendo')
+        new_kendo = int(request.form.get('kendo'))
         kendoshogo = int(request.form.get('kendoshogo'))
-        new_iaido = request.form.get('iaido')
+        new_iaido = int(request.form.get('iaido'))
         iaidoshogo = int(request.form.get('iaidoshogo'))
-        new_jodo = request.form.get('jodo')
+        new_jodo = int(request.form.get('jodo'))
         jodoshogo = int(request.form.get('jodoshogo'))
 
-        address = request.form.get('address')
-        pesel = request.form.get('pesel')
+        address = str(request.form.get('address')).strip()
+        pesel = str(request.form.get('pesel')).strip()
         if not is_valid_pesel(pesel):
             flash('Niepoprawny PESEL.', 'error')
             return redirect(url_for('edit_uplayer'))
@@ -390,20 +392,12 @@ def edit_uplayer():
         if player:
             player.name = name
 
-            if new_kendo:
-                player.kendo = new_kendo
-            if kendoshogo:
-                player.kendoshogo = kendoshogo
-
-            if new_iaido:
-                player.iaido = new_iaido
-            if iaidoshogo:
-                player.iaidoshogo = iaidoshogo
-            
-            if new_jodo:
-                player.jodo = new_jodo
-            if jodoshogo:
-                player.jodoshogo = jodoshogo
+            player.kendo = new_kendo
+            player.kendoshogo = kendoshogo
+            player.iaido = new_iaido
+            player.iaidoshogo = iaidoshogo
+            player.jodo = new_jodo
+            player.jodoshogo = jodoshogo
 
             if address:
                 player.address = address
@@ -417,11 +411,11 @@ def edit_uplayer():
                 name=name,
                 pesel=pesel if pesel else '',
                 address=address if address else '',
-                kendo=new_kendo if new_kendo else '',
+                kendo=new_kendo if new_kendo else 0,
                 kendoshogo=kendoshogo,
-                iaido=new_iaido if new_iaido else '',
+                iaido=new_iaido if new_iaido else 0,
                 iaidoshogo=iaidoshogo,
-                jodo=new_jodo if new_jodo else '',
+                jodo=new_jodo if new_jodo else 0,
                 jodoshogo=jodoshogo,
                 club=club.id,
                 )
@@ -437,4 +431,5 @@ def edit_uplayer():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()

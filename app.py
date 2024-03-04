@@ -5,6 +5,7 @@ from models import db, User, Club, Player
 from functools import wraps
 import datetime
 from utils import is_valid_pesel, get_playeriD
+from markupsafe import escape
 
 
 app = Flask(__name__)
@@ -89,8 +90,8 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = escape(request.form['username'])
+        password = escape(request.form['password'])
 
         user = User.query.filter_by(username=username).first()
         # print(user)
@@ -124,7 +125,7 @@ def logout():
 @login_required
 def rodo():
     if request.method == 'POST':
-        rodo = request.form['rodo']
+        rodo = escape(request.form['rodo'])
         
         if rodo == 'true':
             current_user.rodo = datetime.datetime.now()
@@ -142,7 +143,7 @@ def rodo():
 @login_required
 def coc():
     if request.method == 'POST':
-        coc = request.form['coc']
+        coc = escape(request.form['coc'])
         
         if coc == 'true':
             current_user.coc = datetime.datetime.now()
@@ -159,11 +160,11 @@ def coc():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        key = request.form['secretkey']
-        rodo = datetime.datetime.now() if request.form['rodo'] == 'true' else False
+        username = escape(request.form['username'])
+        email = escape(request.form['email'])
+        password = escape(request.form['password'])
+        key = escape(request.form['secretkey'])
+        rodo = datetime.datetime.now() if escape(request.form['rodo']) == 'true' else False
 
         if not rodo:
             flash('Nie można założyć konta, wymagana zgoda na RODO.', 'error')
@@ -214,10 +215,10 @@ def profile():
 def edit_profile():
     if request.method == 'POST':
         # current_user.username = request.form['username']
-        current_user.name = request.form['name']
-        current_user.surname = request.form['surname']
-        current_user.email = request.form['email']
-        current_user.phone = request.form['phone']
+        current_user.name = escape(request.form['name'])
+        current_user.surname = escape(request.form['surname'])
+        current_user.email = escape(request.form['email'])
+        current_user.phone = escape(request.form['phone'])
         db.session.commit()
         flash('Nowe dane zapisane.', 'success')
         return redirect(url_for('profile'))
@@ -266,15 +267,15 @@ def edit_instructor(id):
         if player.instructor == None:
             player.instructor = '000'
 
-        new_kendo = request.form.get('newKendo')
+        new_kendo = escape(request.form.get('newKendo'))
         if new_kendo == None:
             new_kendo = player.instructor[0]
         
-        new_iaido = request.form.get('newIaido')
+        new_iaido = escape(request.form.get('newIaido'))
         if new_iaido == None:
             new_iaido = player.instructor[1]
         
-        new_jodo = request.form.get('newJodo')
+        new_jodo = escape(request.form.get('newJodo'))
         if new_jodo == None:
             new_jodo = player.instructor[2]
         
@@ -305,21 +306,21 @@ def template():
 def edit_player(id):
     player = Player.query.get_or_404(id)
     if request.method == 'POST':
-        new_kendo = request.form.get('newKendo')
+        new_kendo = escape(request.form.get('newKendo'))
         if new_kendo:
             player.kendo = new_kendo
 
-        new_iaido = request.form.get('newIaido')
+        new_iaido = escape(request.form.get('newIaido'))
         if new_iaido:
             player.iaido = new_iaido
         
-        new_jodo = request.form.get('newJodo')
+        new_jodo = escape(request.form.get('newJodo'))
         if new_jodo:
             player.jodo = new_jodo
 
-        kendoactive = request.form.get('kendoactive')
-        iaidoactive = request.form.get('iaidoactive')
-        jodoactive = request.form.get('jodoactive')
+        kendoactive = escape(request.form.get('kendoactive'))
+        iaidoactive = escape(request.form.get('iaidoactive'))
+        jodoactive = escape(request.form.get('jodoactive'))
         licence = 0
         if kendoactive:
             licence += int(kendoactive)
@@ -329,27 +330,27 @@ def edit_player(id):
             licence += int(jodoactive)
         player.licence = licence
 
-        kendolicence = request.form.get('kendolicence')
+        kendolicence = escape(request.form.get('kendolicence'))
         if kendolicence:
             player.kendolicence = datetime.datetime.strptime(kendolicence, '%Y-%m-%d')
         
-        iaidolicence = request.form.get('iaidolicence')
+        iaidolicence = escape(request.form.get('iaidolicence'))
         if iaidolicence:
             player.iaidolicence = datetime.datetime.strptime(iaidolicence, '%Y-%m-%d')
 
-        jodolicence = request.form.get('jodolicence')
+        jodolicence = escape(request.form.get('jodolicence'))
         if jodolicence:
             player.jodolicence = datetime.datetime.strptime(jodolicence, '%Y-%m-%d')
 
-        kendoshogo = request.form.get('kendoshogo')
+        kendoshogo = escape(request.form.get('kendoshogo'))
         if kendoshogo:
             player.kendoshogo = int(kendoshogo)
             
-        iaidoshogo = request.form.get('iaidoshogo')
+        iaidoshogo = escape(request.form.get('iaidoshogo'))
         if iaidoshogo:
             player.iaidoshogo = int(iaidoshogo)
         
-        jodoshogo = request.form.get('jodoshogo')
+        jodoshogo = escape(request.form.get('jodoshogo'))
         if jodoshogo:
             player.jodoshogo = int(jodoshogo)
 
@@ -376,15 +377,15 @@ def edit_uplayer():
         if isinstance(current_user.surname, str):
             name += " " + current_user.surname
         
-        new_kendo = int(request.form.get('kendo'))
-        kendoshogo = int(request.form.get('kendoshogo'))
-        new_iaido = int(request.form.get('iaido'))
-        iaidoshogo = int(request.form.get('iaidoshogo'))
-        new_jodo = int(request.form.get('jodo'))
-        jodoshogo = int(request.form.get('jodoshogo'))
+        new_kendo = int(escape(request.form.get('kendo')))
+        kendoshogo = int(escape(request.form.get('kendoshogo')))
+        new_iaido = int(escape(request.form.get('iaido')))
+        iaidoshogo = int(escape(request.form.get('iaidoshogo')))
+        new_jodo = int(escape(request.form.get('jodo')))
+        jodoshogo = int(escape(request.form.get('jodoshogo')))
 
-        address = str(request.form.get('address')).strip()
-        pesel = str(request.form.get('pesel')).strip()
+        address = str(escape(request.form.get('address'))).strip()
+        pesel = str(escape(request.form.get('pesel'))).strip()
         if not is_valid_pesel(pesel):
             flash('Niepoprawny PESEL.', 'error')
             return redirect(url_for('edit_uplayer'))

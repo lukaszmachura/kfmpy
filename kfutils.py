@@ -11,7 +11,7 @@ def set_licence_date(date):
     if date:
         date = datetime.datetime.strptime(date, '%Y-%m-%d')
     else:
-        date = datetime.datetime.min
+        date = datetime.datetime(2000, 1, 1, 0, 0)
     return date
 
 

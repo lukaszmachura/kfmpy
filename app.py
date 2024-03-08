@@ -56,7 +56,6 @@ def home():
 @login_required
 @admin_required
 def update_app():
-    # command = subprocess.run(["ls", "-l", 'oko'])
     command = subprocess.run(["git", "pull"], 
                                   stdout=subprocess.PIPE, 
                                   text=True)
@@ -64,6 +63,15 @@ def update_app():
         flash(f"The exit code was: {command.stdout}", 'error')
     else:
         flash(f"The exit code was: {command.stdout}", 'success')
+
+    command = subprocess.run(["touch", "tmp/restart.txt"], 
+                                  stdout=subprocess.PIPE, 
+                                  text=True)
+    if command.returncode:
+        flash(f"The exit code was: {command.stdout}", 'error')
+    else:
+        flash(f"The exit code was: {command.stdout}", 'success')
+
     return redirect(url_for('home'))
 
 

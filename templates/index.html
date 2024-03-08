@@ -4,7 +4,7 @@
   <div class="jumbotron text-center">
     <h1 class="display-4">Polski Związek Kendo</h1>
     <p class="lead">Strefa zawodnika</p>
-    {% if current_user.admin == 7 %}
+    {% if current_user.admin %}
     <hr class="my-4">
     <a class="btn btn-primary btn-lg" href="{{url_for('update_app')}}" role="button"><i class="fas fa-cloud-download-alt"></i> Update</a>
     {% endif %}

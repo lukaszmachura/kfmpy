@@ -18,20 +18,11 @@ def clean_input(s):
 
 
 def parse_csv(filepath):
-    # Open the CSV file
     with open(filepath, mode='r', encoding='utf-8') as file:
-        # Create a CSV reader object using the file object
         reader = csv.DictReader(file)
-        
-        # Initialize an empty list to store rows as dictionaries
         data = []
-        
-        # Iterate over the rows in the CSV file
         for row in reader:
-            # Each row is already a dictionary; add it to the list
             data.append(row)
-    
-    # Return the list of dictionaries
     return data
 
 
@@ -69,8 +60,8 @@ def parse_club_csv(file_path):
 
 
 def date_formatter(year, month, day):
-    birthdate = datetime.datetime(year, month, day)
-    return birthdate.strftime("%Y-%m-%d")
+    date = datetime.datetime(year, month, day)
+    return date.strftime("%Y-%m-%d")
 
 
 def pesel_to_birthdate(pesel):

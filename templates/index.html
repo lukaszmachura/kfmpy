@@ -5,16 +5,24 @@
     <h1 class="display-4">Polski Związek Kendo</h1>
     <p class="lead">Strefa zawodnika</p>
     {% if current_user.admin == 7 %}
-    <hr class="my-4">
-    <a class="btn btn-primary btn-lg" href="{{url_for('update_app')}}" role="button"><i class="fas fa-cloud-download-alt"></i> Update</a>
+      <hr class="my-4">
+      <a class="btn btn-primary btn-lg" href="{{url_for('update_app')}}" role="button">
+        <i class="fas fa-cloud-download-alt"></i> Update
+      </a>
     {% endif %}
     <hr class="my-4">
     <p class="lead">
       {% if current_user.is_authenticated %}
-      <a class="btn btn-primary btn-lg" href="{{url_for('logout')}}" role="button"><i class="fa fa-sign-out-alt"></i> Wyloguj</a>
+      <a class="btn btn-primary btn-lg" href="{{url_for('logout')}}" role="button">
+        <i class="fa fa-sign-out-alt"></i> Wyloguj
+      </a>
       {% else %}
-      <a class="btn btn-primary btn-lg" href="{{url_for('login')}}" role="button"><i class="fa fa-sign-in-alt"></i> Zaloguj</a>
-      <a class="btn btn-primary btn-lg" href="{{url_for('register')}}" role="button"><i class="fa fa-user-plus"></i> Zarejestruj</a>
+      <a class="btn btn-primary btn-lg" href="{{url_for('login')}}" role="button">
+        <i class="fa fa-sign-in-alt"></i> Zaloguj
+      </a>
+      <a class="btn btn-primary btn-lg" href="{{url_for('register')}}" role="button">
+        <i class="fa fa-user-plus"></i> Zarejestruj
+      </a>
       {% endif %}
     </p>
   </div>

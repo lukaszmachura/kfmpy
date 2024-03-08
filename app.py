@@ -4,8 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Club, Player
 from functools import wraps
 import datetime
-from utils import is_valid_pesel, get_playeriD
 from markupsafe import escape
+from utils import *
+from kfutils import *
+from jfilters import *
 
 
 app = Flask(__name__)
@@ -25,7 +27,7 @@ def load_user(user_id):
 
 def admin_required(f):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         # Check if the current user is logged in and is an admin
         if current_user.is_authenticated and current_user.admin:
             return f(*args, **kwargs)
@@ -34,46 +36,8 @@ def admin_required(f):
             # You can also abort with a 403 Forbidden status code
             flash('You do not have permission to access this page (403).', 'error')
             return redirect(url_for('home'))
-    return decorated_function
+    return wrapper
 
-
-def is_older_than_one_year(date):
-    if date == None:
-        return False
-    
-    current_date = datetime.datetime.now()
-    one_year_ago = current_date - datetime.timedelta(days=365)
-    
-    if date < one_year_ago:
-        return True
-    else:
-        return False
-    
-def is_younger_than_one_year(date):
-    if date == None:
-        return False
-    return not is_older_than_one_year(date)
-
-def dan(g):
-    if g == None:
-        return ''
-    g = int(g)
-    if g > 0:
-        return f'{g} dan'
-    elif g < 0:
-        return f'{-g} kyu'
-    else:
-        return ''
-
-def shogo(g):
-    g = int(g)
-    if g == 1:
-        return 'Renshi'
-    elif g == 2:
-        return 'Kyoshi'
-    elif g == 3:
-        return 'Hanshi'
-    return ''
 
 # Register the filter with Jinja2
 app.jinja_env.filters['is_older_than_one_year'] = is_older_than_one_year
@@ -306,54 +270,19 @@ def template():
 def edit_player(id):
     player = Player.query.get_or_404(id)
     if request.method == 'POST':
-        new_kendo = escape(request.form.get('newKendo'))
-        if new_kendo:
-            player.kendo = new_kendo
+        player.kendo = grade_from_form(request.form.get('newKendo'))
+        player.iaido = grade_from_form(request.form.get('newIaido'))
+        player.jodo = grade_from_form(request.form.get('newJodo'))
 
-        new_iaido = escape(request.form.get('newIaido'))
-        if new_iaido:
-            player.iaido = new_iaido
-        
-        new_jodo = escape(request.form.get('newJodo'))
-        if new_jodo:
-            player.jodo = new_jodo
+        player.kendolicence = set_licence_date(request.form.get('kendolicence'))
+        player.iaidolicence = set_licence_date(request.form.get('iaidolicence'))
+        player.jodolicence = set_licence_date(request.form.get('jodolicence'))
+        player.licence = kf_licence(player)
 
-        kendoactive = escape(request.form.get('kendoactive'))
-        iaidoactive = escape(request.form.get('iaidoactive'))
-        jodoactive = escape(request.form.get('jodoactive'))
-        licence = 0
-        if kendoactive:
-            licence += int(kendoactive)
-        if iaidoactive:
-            licence += int(iaidoactive)
-        if jodoactive:
-            licence += int(jodoactive)
-        player.licence = licence
-
-        kendolicence = escape(request.form.get('kendolicence'))
-        if kendolicence:
-            player.kendolicence = datetime.datetime.strptime(kendolicence, '%Y-%m-%d')
-        
-        iaidolicence = escape(request.form.get('iaidolicence'))
-        if iaidolicence:
-            player.iaidolicence = datetime.datetime.strptime(iaidolicence, '%Y-%m-%d')
-
-        jodolicence = escape(request.form.get('jodolicence'))
-        if jodolicence:
-            player.jodolicence = datetime.datetime.strptime(jodolicence, '%Y-%m-%d')
-
-        kendoshogo = escape(request.form.get('kendoshogo'))
-        if kendoshogo:
-            player.kendoshogo = int(kendoshogo)
+        player.kendoshogo = set_shogo(player, request.form.get('kendoshogo'), 'kendo')
+        player.iaidoshogo = set_shogo(player, request.form.get('iaidoshogo'), 'iaido')
+        player.jodoshogo = set_shogo(player, request.form.get('jodoshogo'), 'jodo')
             
-        iaidoshogo = escape(request.form.get('iaidoshogo'))
-        if iaidoshogo:
-            player.iaidoshogo = int(iaidoshogo)
-        
-        jodoshogo = escape(request.form.get('jodoshogo'))
-        if jodoshogo:
-            player.jodoshogo = int(jodoshogo)
-
         db.session.commit()
         return redirect(url_for('players'))
     return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
@@ -377,11 +306,11 @@ def edit_uplayer():
         if isinstance(current_user.surname, str):
             name += " " + current_user.surname
         
-        new_kendo = int(escape(request.form.get('kendo')))
+        kendograde = int(escape(request.form.get('kendo')))
         kendoshogo = int(escape(request.form.get('kendoshogo')))
-        new_iaido = int(escape(request.form.get('iaido')))
+        iaidograde = int(escape(request.form.get('iaido')))
         iaidoshogo = int(escape(request.form.get('iaidoshogo')))
-        new_jodo = int(escape(request.form.get('jodo')))
+        jodograde = int(escape(request.form.get('jodo')))
         jodoshogo = int(escape(request.form.get('jodoshogo')))
 
         address = str(escape(request.form.get('address'))).strip()
@@ -393,11 +322,11 @@ def edit_uplayer():
         if player:
             player.name = name
 
-            player.kendo = new_kendo
+            player.kendo = kendograde
             player.kendoshogo = kendoshogo
-            player.iaido = new_iaido
+            player.iaido = iaidograde
             player.iaidoshogo = iaidoshogo
-            player.jodo = new_jodo
+            player.jodo = jodograde
             player.jodoshogo = jodoshogo
 
             if address:
@@ -412,11 +341,11 @@ def edit_uplayer():
                 name=name,
                 pesel=pesel if pesel else '',
                 address=address if address else '',
-                kendo=new_kendo if new_kendo else 0,
+                kendo=kendograde if kendograde else 0,
                 kendoshogo=kendoshogo,
-                iaido=new_iaido if new_iaido else 0,
+                iaido=iaidograde if iaidograde else 0,
                 iaidoshogo=iaidoshogo,
-                jodo=new_jodo if new_jodo else 0,
+                jodo=jodograde if jodograde else 0,
                 jodoshogo=jodoshogo,
                 club=club.id,
                 )

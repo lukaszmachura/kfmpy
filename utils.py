@@ -1,5 +1,21 @@
-from datetime import datetime
+import datetime
 import csv
+
+
+def clean_input(s):
+    if isinstance(s, str):
+        if s == 'None':  # escaped None
+            return None
+        else:
+            if len(s) == 3:  # licence
+                return s
+            else:  # grades, admins...
+                try:
+                    return int(s)
+                except ValueError:
+                    return None
+    return s
+
 
 def parse_csv(filepath):
     # Open the CSV file
@@ -41,7 +57,7 @@ def parse_club_csv(file_path):
                     'city': row['city'],
                     'club_key': row['club_key'],
                     'email': row['email'],
-                    'licence': datetime.strptime(row['licence'], '%Y-%m-%d'),
+                    'licence': datetime.datetime.strptime(row['licence'], '%Y-%m-%d'),
                     'licencehistory': row['licencehistory'],
                     'art': row['art']
                 })
@@ -53,7 +69,7 @@ def parse_club_csv(file_path):
 
 
 def date_formatter(year, month, day):
-    birthdate = datetime(year, month, day)
+    birthdate = datetime.datetime(year, month, day)
     return birthdate.strftime("%Y-%m-%d")
 
 

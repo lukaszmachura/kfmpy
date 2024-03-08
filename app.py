@@ -5,6 +5,7 @@ from models import db, User, Club, Player
 from functools import wraps
 import datetime
 from markupsafe import escape
+import subprocess
 from utils import *
 from kfutils import *
 from jfilters import *
@@ -49,6 +50,21 @@ app.jinja_env.filters['shogo'] = shogo
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.route('/update_app')
+@login_required
+@admin_required
+def update_app():
+    # command = subprocess.run(["ls", "-l", 'oko'])
+    command = subprocess.run(["git", "pull"], 
+                                  stdout=subprocess.PIPE, 
+                                  text=True)
+    if command.returncode:
+        flash(f"The exit code was: {command.stdout}", 'error')
+    else:
+        flash(f"The exit code was: {command.stdout}", 'success')
+    return redirect(url_for('home'))
 
 
 @app.route('/login', methods=['GET', 'POST'])

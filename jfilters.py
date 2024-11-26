@@ -1,9 +1,31 @@
 import datetime
 
 
+def ymd(date):
+    miesiace_dopelniacz = {
+        1: "stycznia",
+        2: "lutego",
+        3: "marca",
+        4: "kwietnia",
+        5: "maja",
+        6: "czerwca",
+        7: "lipca",
+        8: "sierpnia",
+        9: "września",
+        10: "października",
+        11: "listopada",
+        12: "grudnia"
+    }
+    ret = f"{date.day} {miesiace_dopelniacz[date.month]} {date.year}"
+    return ret  #str(date.year) + '.' + str(date.month) + '.' + str(date.day)
+
+
 def is_older_than_one_year(date):
     if date == None:
-        return False
+        return True
+    
+    if date == "None":
+        return True
     
     current_date = datetime.datetime.now()
     one_year_ago = current_date - datetime.timedelta(days=365)

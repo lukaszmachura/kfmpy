@@ -3,7 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Flask
+venv
 .venv/
+*.log
 
 # CSV
 *.csv

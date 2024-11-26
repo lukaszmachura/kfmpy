@@ -30,7 +30,8 @@ class User(db.Model, UserMixin):
     # 4 - kendo
     # 5 - 1 + 4 - kendo + jodo
     # 6 - 2 + 4 - kendo + iaido
-    # 7 - 1 + 2 + 4 - all - admin
+    # 7 - 1 + 2 + 4 - kendo + iaido + jodo 
+    # 8 - admin (superuser)
 
     # flask login
     is_active = db.Column(db.Boolean, default=True)
@@ -108,3 +109,28 @@ class Club(db.Model):
     licence = db.Column(db.DateTime)
     licencehistory = db.Column(db.String(200))
     art = db.Column(db.Integer, default=0) # same as admin
+
+
+class Licence(db.Model):
+    '''federation licences model'''
+    id = db.Column(db.Integer, primary_key=True)
+    playeriD = db.Column(db.String(10))  # TODO make this Player reference
+    date = db.Column(db.DateTime)  # date of payment
+    licence = db.Column(db.Integer, default=0)
+    paymentID = db.Column(db.String(50))  # copy from PayU (or some other shit)
+    # 0 - honorary member / exempt from fees
+    # 1 - jodo
+    # 2 - iaido
+    # 3 - 1 + 2 - iaido + jodo
+    # 4 - kendo
+    # 5 - 1 + 4 - kendo + jodo
+    # 6 - 2 + 4 - kendo + iaido
+    # 7 - 1 + 2 + 4 - kendo + iaido + jodo
+    # 8 - instructor
+    # 9 = 8 + 1 - instructor jodo
+    # 10 = 8 + 2 - instructor iaido
+    # 11 = 8 + 1 + 2 - - instructor jodo + iaido
+    # 12 = 8 + 4 - instructor kendo
+    # 13 = 8 + 1 + 4 - instructor jodo + kendo
+    # 14 = 8 + 2 + 4 - instructor iaido + kendo
+    # 15 = 8 + 1 + 2 + 4 - instructor jodo + iaido + kendo 

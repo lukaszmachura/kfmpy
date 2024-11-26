@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Licencje użytkownika{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col">
+        
+      </div>
+      <div class="col-6">
+<div class="card">
+    <div class="card-header">
+        {{ user.name }} {{ user.surname }}
+    </div>
+    <div class="card-body">
+        <p>Kwota do opłaty: {{ amount }} zł</p>
+        <p>Opłacasz licencje administracyjną (50 PLN ) oraz zawodnicze:</p>
+        <ul></ul>
+          {% if 'k' in info[-3:] %}
+          <li>kendo</li>
+          {% endif %}
+          {% if 'i' in info[-3:] %}
+          <li>iaido</li>
+          {% endif %}
+          {% if 'j' in info[-3:] %}
+          <li>jodo</li>
+          {% endif %}
+        </ul>
+        <a href="{{ uri }}" class="btn btn-primary">Opłać licencje</a>
+    </div>
+  </div>
+   
+
+</div>
+<div class="col">
+  
+</div>
+</div>
+
+{% endblock %}

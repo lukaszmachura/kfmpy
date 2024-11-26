@@ -3,9 +3,8 @@
 {% block title %}Profil użytkownika{% endblock %}
 
 {% block content %}
-    <dl class="row">
-        <dt class="col-sm-3"><h2 class="mb-1">Profil użytkownika</h2></dt>
-        <dd class="col-sm-9">
+    <div class="card">
+        <h5 class="card-header">
             {% if user.is_authenticated %}
                 <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">
                 Edytuj profil
@@ -26,92 +25,155 @@
                     {% elif user.admin == 6 %}
                         Uprawnienia edycji Iaido i Kendo
                     {% elif user.admin == 7 %}
+                        Uprawnienia edycji Jodo, Iaido i Kendo
+                    {% elif user.admin == 8 %}
                         Admin
                     {% endif %}
                 </button>
             {% endif %}
-        </dd>
-    
-        <dt class="col-sm-3">nazwa użytkownika</dt>
-        <dd class="col-sm-9">{{ user.username }}</dd>
-        
-        <dt class="col-sm-3">imię</dt>
-        <dd class="col-sm-9">{{ user.name if user.name else "proszę uzupełnić" }}</dd>
-        <dt class="col-sm-3">nazwisko</dt>
-        <dd class="col-sm-9">{{ user.surname if user.surname else "proszę uzupełnić" }}</dd>
-        
-        <dt class="col-sm-3">email</dt>
-        <dd class="col-sm-9">{{ user.email }}</dd>
-        <dt class="col-sm-3">numer telefonu</dt>
-        <dd class="col-sm-9">{{ user.phone if user.phone else "proszę uzupełnić" }}</dd>
+        </h5>
+        <div class="card-body">
+            <h5 class="card-title">login: {{ user.username }}</h5>
+            <p class="card-text">
+                <dl class="row">
+                    <dt class="col-sm-3">nazwa użytkownika</dt>
+                    <dd class="col-sm-9">{{ user.username }}</dd>
+                    
+                    <dt class="col-sm-3">imię</dt>
+                    <dd class="col-sm-9">{{ user.name if user.name else "proszę uzupełnić" }}</dd>
+                    <dt class="col-sm-3">nazwisko</dt>
+                    <dd class="col-sm-9">{{ user.surname if user.surname else "proszę uzupełnić" }}</dd>
+                    
+                    <dt class="col-sm-3">email</dt>
+                    <dd class="col-sm-9">{{ user.email if user.email else "proszę uzupełnić" }}</dd>
+                    <dt class="col-sm-3">numer telefonu</dt>
+                    <dd class="col-sm-9">{{ user.phone if user.phone else "proszę uzupełnić" }}</dd>
 
-        <dt class="col-sm-3">RODO</dt>
-        <dd class="col-sm-9">zgody udzielono w dniu {{ user.rodo.strftime("%Y-%m-%d") }}</dd>
-        <dt class="col-sm-3">kodeks postępowania PZK
-            (<a href="https://drive.google.com/file/d/1kQhL5ApG7VsSfYINORMqadKHnqpJbq6c/view?usp=sharing" target="_blank">link</a>)
-        </dt>
-        <dd class="col-sm-9">przyjęto w dniu {{ user.coc.strftime("%Y-%m-%d") }}</dd>
-    </dl>
+                    <dt class="col-sm-3">RODO</dt>
+                    <dd class="col-sm-9">zgody udzielono w dniu {{ user.rodo.strftime("%Y-%m-%d") }}</dd>
+                    <dt class="col-sm-3">kodeks postępowania PZK
+                        (<a href="https://drive.google.com/file/d/1kQhL5ApG7VsSfYINORMqadKHnqpJbq6c/view?usp=sharing" target="_blank">link</a>)
+                    </dt>
+                    <dd class="col-sm-9">przyjęto w dniu {{ user.coc.strftime("%Y-%m-%d") }}</dd>
+                </dl>
+            </p>
+        </div>
+    </div>
 
-    
-
-    <hr class="hr hr-blurry col-sm-3" />
-    
-    <dl class="row">
-        <dt class="col-sm-3"><h2 class="mb-1">Profil zawodnika</h2></dt>
-        <dd class="col-sm-9">
+    <div class="card mt-2">
+        <h5 class="card-header">
             {% if user.is_authenticated %}
-            <a href="{{ url_for('edit_uplayer') }}" class="btn btn-primary">
-            {{ "Edytuj" if player else "Dodaj" }} profil zawodnika
-            </a>
-        {% endif %}
-        </dd>
-    {% if player %}
-        <dt class="col-sm-3">nr licencji PZK</dt>
-        <dd class="col-sm-9">{{ player.playeriD }}</dd>
-        <dt class="col-sm-3">pesel</dt>
-        <dd class="col-sm-9">{{ player.pesel if player.pesel else "dodaj pesel" }}</dd>
-        <dt class="col-sm-3">adres</dt>
-        <dd class="col-sm-9">{{ player.address if player.address else "dodaj adres" }}</dd>
-        
-        {% if player.kendo %}
-            <dt class="col-sm-3">kendo</dt>
-            <dd class="col-sm-9">
-                {% if player.kendoshogo == 1 %}Renshi
-                {% elif player.kendoshogo == 2 %}Kyoshi
-                {% elif player.kendoshogo == 3 %}Hanshi
+                <a href="{{ url_for('edit_uplayer') }}" class="btn btn-primary">
+                {{ "Edytuj" if player else "Dodaj" }} profil zawodnika
+                </a>
+            {% endif %}
+        </h5>
+        <div class="card-body">
+          <h5 class="card-title">nr licencji: {{ player.playeriD }}</h5>
+          <p class="card-text">
+            <dl class="row">
+            {% if player %}
+                <dt class="col-sm-3">pesel</dt>
+                <dd class="col-sm-9">{{ player.pesel if player.pesel else "dodaj pesel" }}</dd>
+                <dt class="col-sm-3">adres</dt>
+                <dd class="col-sm-9">{{ player.address if player.address else "dodaj adres" }}</dd>
+                
+                {% if player.kendo %}
+                    <dt class="col-sm-3">kendo</dt>
+                    <dd class="col-sm-9">
+                        {% if player.kendoshogo == 1 %}Renshi
+                        {% elif player.kendoshogo == 2 %}Kyoshi
+                        {% elif player.kendoshogo == 3 %}Hanshi
+                        {% endif %}
+                        {{ player.kendo|dan }}
+                    </dd>
                 {% endif %}
-                {{ player.kendo|dan }}
-            </dd>
-        {% endif %}
-        {% if player.iaido %}
-            <dt class="col-sm-3">iaido</dt>
-            <dd class="col-sm-9">
-                {% if player.iaidoshogo == 1 %}Renshi
-                {% elif player.iaidoshogo == 2 %}Kyoshi
-                {% elif player.iaidoshogo == 3 %}Hanshi
+                {% if player.iaido %}
+                    <dt class="col-sm-3">iaido</dt>
+                    <dd class="col-sm-9">
+                        {% if player.iaidoshogo == 1 %}Renshi
+                        {% elif player.iaidoshogo == 2 %}Kyoshi
+                        {% elif player.iaidoshogo == 3 %}Hanshi
+                        {% endif %}
+                        {{ player.iaido|dan }}
+                    </dd>
                 {% endif %}
-                {{ player.iaido|dan }}
-            </dd>
-        {% endif %}
-        {% if player.jodo %}
-            <dt class="col-sm-3">jodo</dt>
-            <dd class="col-sm-9">
-                {% if player.jodoshogo == 1 %}Renshi
-                {% elif player.jodoshogo == 2 %}Kyoshi
-                {% elif player.jodoshogo == 3 %}Hanshi
+                {% if player.jodo %}
+                    <dt class="col-sm-3">jodo</dt>
+                    <dd class="col-sm-9">
+                        {% if player.jodoshogo == 1 %}Renshi
+                        {% elif player.jodoshogo == 2 %}Kyoshi
+                        {% elif player.jodoshogo == 3 %}Hanshi
+                        {% endif %}
+                        {{ player.jodo|dan }}
+                    </dd>
                 {% endif %}
-                {{ player.jodo|dan }}
-            </dd>
-        {% endif %}
-        {% if player.leader %}
-            <dt class="col-sm-3">lider klubu</dd>
-        {% else %}
-            <dt class="col-sm-3">zawodnik klubu</dt>
-        {% endif %}
-        <dd class="col-sm-9">{{ club.name }} {{ club.city }}</dd>
-    {% endif %}
-    </dl>
+                {% if player.leader %}
+                    <dt class="col-sm-3">lider klubu</dd>
+                {% else %}
+                    <dt class="col-sm-3">zawodnik klubu</dt>
+                {% endif %}
+                <dd class="col-sm-9">{{ club.name }} {{ club.city }}</dd>
+            {% endif %}
+            </dl>
+          </p>
+         
+        </div>
+      </div>
 
-    
+      <div class="card mt-2">
+        <h5 class="card-header">
+            {% 
+                if 
+                player.kendolicence | is_older_than_one_year 
+                or
+                player.iaidolicence | is_older_than_one_year 
+                or
+                player.jodolicence | is_older_than_one_year
+            %}
+                {% if user.email %}
+                    <a href="{{ url_for('pay_off_licence') }}" class="btn btn-primary">
+                        Opłać licencje
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-warning">
+                        Aby opłacić licencje uzupełnij adres email
+                    </a>
+                {% endif %}
+            {% endif %}
+        </h5>
+        <div class="card-body">
+          <h5 class="card-title">Licencje zawodnicze</h5>
+          <p class="card-text">
+            <dl class="row">
+                <dt class="col-sm-3">Kendo</dt>
+                <dd class="col-sm-9">
+                    {% if player.kendolicence | is_younger_than_one_year %}
+                    Aktywna ({{ player.kendolicence | ymd }})
+                    {% else %}
+                    Nieaktywna
+                    {% endif %}
+                </dd>
+        
+                <dt class="col-sm-3">Iaido</dt>
+                <dd class="col-sm-9">
+                    {% if player.iaidolicence | is_younger_than_one_year %}
+                    Aktywna ({{ player.iaidolicence | ymd }})
+                    {% else %}
+                    Nieaktywna
+                    {% endif %}
+                </dd>
+        
+                <dt class="col-sm-3">Jodo</dt>
+                <dd class="col-sm-9">
+                    {% if player.jodolicence | is_younger_than_one_year %}
+                    Aktywna ({{ player.jodolicence | ymd }})
+                    {% else %}
+                    Nieaktywna
+                    {% endif %}
+                </dd>
+            </dl>
+          </p>
+        </div>
+      </div>
 {% endblock %}

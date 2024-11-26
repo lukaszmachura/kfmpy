@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Licencje użytkownika{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col">
+        
+      </div>
+      <div class="col-6">
+<div class="card">
+    <div class="card-header">
+        {{ player.playeriD }}, {{ user.name }} {{ user.surname }}
+    </div>
+    <div class="card-body">
+      <!-- <h5 class="card-title">{{ user.name }} {{ user.surname }}</h5> -->
+      
+        <form class="was-validated" method="post" action="{{ url_for('payment') }}">
+            <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="licencjaBiuro" name="licencjaBiuro" disabled checked>
+                <label class="custom-control-label" for="licencjaKendo">Biuro PZK</label>
+                <div class="px-3">część administracyjna</div>
+              </div>
+            <div class="custom-control custom-checkbox mb-3">
+              <input type="checkbox" class="custom-control-input" id="licencjaKendo" name="licencjaKendo">
+              <label class="custom-control-label" for="licencjaKendo">Kendo</label>
+              <div class="px-3">licencja zawodnicza kendo</div>
+            </div>
+            <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="licencjaIaido" name="licencjaIaido">
+                <label class="custom-control-label" for="licencjaIaido">Iaido</label>
+                <div class="px-3">licencja zawodnicza iaido</div>
+            </div>
+            <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="licencjaJodo" name="licencjaJodo">
+                <label class="custom-control-label" for="licencjaJodo">Jodo</label>
+                <div class="px-3">licencja zawodnicza jodo</div>
+            </div>
+            <button class="btn btn-primary" type="submit">Opłać licencje</button>
+        </form>   
+    </div>
+  </div>
+   
+
+</div>
+<div class="col">
+  
+</div>
+</div>
+
+{% endblock %}

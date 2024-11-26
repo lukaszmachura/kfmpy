@@ -50,28 +50,24 @@
                 <a class="nav-link" href="{{ url_for('clubs') }}">
                     <i class="fa-solid fa-people-roof"></i> Kluby</a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('players') }}">
                     <i class="fa-solid fa-user-ninja"></i> Zawodnicy</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('instructors') }}">
                     <i class="fa-solid fa-user-tie"></i> Instruktorzy</a>
-            </li> -->
+            </li>
             {% if current_user.is_authenticated and current_user.admin %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('users') }}">
-                        <i class="fa-solid fa-users"></i> Użytkownicy</a>
+                        <i class="fa-solid fa-users"></i> Users</a>
                 </li>
             {% endif %}
         </ul>
         <ul class="navbar-nav me-auto">
             {% if current_user.is_authenticated %}
                 <!-- Show logout icon if user is authenticated -->
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('licences') }}">
-                        <i class="fa-solid fa-user-check"></i> Licencje</a>
-                </li>  -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('profile') }}">
                         <i class="fa-solid fa-user-gear"></i> Profil</a>
@@ -143,7 +139,7 @@
     <div class="container">
         <span class="text-muted">
             LM &copy; 2024
-            {% if current_user.is_authenticated and current_user.surname == "Szczepański" %}
+            {% if current_user.is_authenticated and current_user.surname == "Majchrzak" %}
             amiscnt
             {% endif %}
         </span>

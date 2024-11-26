@@ -6,11 +6,20 @@ from functools import wraps
 import datetime
 from markupsafe import escape
 import subprocess
+import logging
 from utils import *
 from kfutils import *
 from jfilters import *
+from pzkconfig import licencje
+from payu import get_redirect_uri
 
 
+# logger file
+logging.basicConfig(filename="admin.log", 
+                    level=logging.WARNING, #DEBUG,
+                    format="%(asctime)s:%(levelname)s:%(message)s")
+
+# Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kendo'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Use SQLite database (you can change this to another database URL)
@@ -30,6 +39,11 @@ def admin_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         # Check if the current user is logged in and is an admin
+        if current_user:
+            logging.debug(f'{current_user.surname} called {f.__name__}')
+        else:
+            logging.debug(f'visitor called {f.__name__}')
+
         if current_user.is_authenticated and current_user.admin:
             return f(*args, **kwargs)
         else:
@@ -45,6 +59,7 @@ app.jinja_env.filters['is_older_than_one_year'] = is_older_than_one_year
 app.jinja_env.filters['is_younger_than_one_year'] = is_younger_than_one_year
 app.jinja_env.filters['dan'] = dan
 app.jinja_env.filters['shogo'] = shogo
+app.jinja_env.filters['ymd'] = ymd
 
 # Routes
 @app.route('/')
@@ -282,10 +297,55 @@ def players():
     return render_template('players.html', players=players, user=current_user, clubs=clubs)
 
 
-@app.route('/template')
-def template():
-    items = User.query.all()
-    return render_template('template.html', items=items)
+################################################
+################# licencje #####################
+
+@app.route('/payment', methods=['POST'])
+@login_required
+def payment():
+    if request.method == 'POST':
+        info = f'_{current_user.name}_{current_user.surname}_'
+        hajs = 50
+        kendo = request.form.get('licencjaKendo')
+        if kendo != None:
+            hajs += 150
+            info += 'k'
+        iaido = request.form.get('licencjaIaido')
+        if iaido != None:
+            hajs += 150
+            info += 'i'
+        jodo = request.form.get('licencjaJodo')
+        if jodo != None:
+            hajs += 150
+            info += 'j'
+
+        # here place PayU order
+        payment_uri = get_redirect_uri(amount=hajs, player_info=info)
+        return render_template(
+            'checkout.html', 
+            user=current_user, 
+            amount=hajs,
+            info=info,
+            uri=payment_uri
+            )  
+        
+    return redirect(url_for('profile'))
+
+@app.route('/licences') #, methods=['GET', 'POST'])
+@login_required
+def licences():
+    player = Player.query.filter_by(userID=current_user.id).first()
+    club = Club.query.filter_by(id=current_user.clubID).first()
+    return render_template('user_licence.html', user=current_user, player=player, club=club)
+
+
+@app.route('/pay_off_licence')
+@login_required
+def pay_off_licence():
+    player = Player.query.filter_by(userID=current_user.id).first()
+    return render_template('pay_off_licence.html', player=player, user=current_user, licencje=licencje)
+
+################################################
 
 
 @app.route('/edit_player/<int:id>', methods=['POST'])
@@ -310,6 +370,7 @@ def edit_player(id):
         db.session.commit()
         return redirect(url_for('players'))
     return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
+
 
 
 

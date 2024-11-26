@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Licencje użytkownika{% endblock %}
+
+{% block content %}
+    <dl class="row">
+        <dt class="col-sm-3"><h2 class="mb-1">{{ user.name }} {{ user.surname }}</h2></dt>
+        <dd class="col-sm-9">
+            <h2 class="mb-1">
+                
+            </h2>    
+        </dd>
+    </dl>
+
+    
+
+    <hr class="hr hr-blurry col-sm-9" />
+    
+    <dl class="row">
+    {% if player %}
+        <dt class="col-sm-3">nr licencji PZK</dt>
+        <dd class="col-sm-9">{{ player.playeriD }}</dd>
+        
+        {% if player.kendo %}
+            <dt class="col-sm-3">kendo</dt>
+            <dd class="col-sm-9">
+                {% if player.kendoshogo == 1 %}Renshi
+                {% elif player.kendoshogo == 2 %}Kyoshi
+                {% elif player.kendoshogo == 3 %}Hanshi
+                {% endif %}
+                {{ player.kendo|dan }}
+            </dd>
+        {% endif %}
+        {% if player.iaido %}
+            <dt class="col-sm-3">iaido</dt>
+            <dd class="col-sm-9">
+                {% if player.iaidoshogo == 1 %}Renshi
+                {% elif player.iaidoshogo == 2 %}Kyoshi
+                {% elif player.iaidoshogo == 3 %}Hanshi
+                {% endif %}
+                {{ player.iaido|dan }}
+            </dd>
+        {% endif %}
+        {% if player.jodo %}
+            <dt class="col-sm-3">jodo</dt>
+            <dd class="col-sm-9">
+                {% if player.jodoshogo == 1 %}Renshi
+                {% elif player.jodoshogo == 2 %}Kyoshi
+                {% elif player.jodoshogo == 3 %}Hanshi
+                {% endif %}
+                {{ player.jodo|dan }}
+            </dd>
+        {% endif %}
+        {% if player.leader %}
+            <dt class="col-sm-3">lider klubu</dd>
+        {% else %}
+            <dt class="col-sm-3">zawodnik klubu</dt>
+        {% endif %}
+        <dd class="col-sm-9">{{ club.name }} {{ club.city }}</dd>
+    {% endif %}
+    </dl>
+
+    <hr class="hr hr-blurry col-sm-9" />
+
+    
+
+    <dl class="row">
+        <dt class="col-sm-3"><h3>Licencja</h3></dt>
+        <dd class="col-sm-9">
+            {% 
+                if 
+                player.kendolicence | is_older_than_one_year 
+                or
+                player.iaidolicence | is_older_than_one_year 
+                or
+                player.jodolicence | is_older_than_one_year
+            %}
+                <a href="{{ url_for('pay_off_licence') }}" class="btn btn-primary">
+                    Opłać licencje
+                </a>
+            {% endif %}
+        </dd>
+
+        <dt class="col-sm-3">Kendo</dt>
+        <dd class="col-sm-9">
+            {% if player.kendolicence | is_younger_than_one_year %}
+            Aktywna ({{ player.kendolicence | ymd }})
+            {% else %}
+            Nieaktywna
+            {% endif %}
+        </dd>
+
+        <dt class="col-sm-3">Iaido</dt>
+        <dd class="col-sm-9">
+            {% if player.iaidolicence | is_younger_than_one_year %}
+            Aktywna ({{ player.iaidolicence | ymd }})
+            {% else %}
+            Nieaktywna
+            {% endif %}
+        </dd>
+
+        <dt class="col-sm-3">Jodo</dt>
+        <dd class="col-sm-9">
+            {% if player.jodolicence | is_younger_than_one_year %}
+            Aktywna ({{ player.jodolicence | ymd }})
+            {% else %}
+            Nieaktywna
+            {% endif %}
+        </dd>
+    </dl>
+
+    
+{% endblock %}

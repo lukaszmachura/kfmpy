@@ -73,7 +73,7 @@ def home():
 def see_log():
     with open('admin.log') as f:
         x = f.readlines()
-    return x
+    return render_template('log.html', x=x)
 
 @app.route('/update_app')
 @login_required

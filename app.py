@@ -158,7 +158,7 @@ def rodo():
 def coc():
     if request.method == 'POST':
         coc = escape(request.form['coc'])
-        
+
         if coc == 'true':
             current_user.coc = datetime.datetime.now()
             db.session.commit()
@@ -331,7 +331,11 @@ def payment():
             info += 'j'
 
         # here place PayU order
-        payment_uri = get_redirect_uri(amount=hajs, player_info=info)
+        pinfo = {
+            'user': current_user,
+            'licences': info
+        }
+        payment_uri = get_redirect_uri(amount=hajs, player_info=pinfo)
         return render_template(
             'checkout.html', 
             user=current_user, 

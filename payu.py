@@ -64,51 +64,59 @@ def get_kendo_licence(client_id, access_token):
         return response
     else:
         return "dupa"
+
+
+def pauy_order_curl(client_id, access_token, amount=100, player_info={}):
+    if player_info:
+        first_name = player_info.get('user').name.capitalize()
+        last_name = player_info.get('user').surname.capitalize()
+    else:
+        first_name = 'John'
+        last_name = 'Doe'
+    player_name = first_name + last_name
     
+    if player_info.get('user').email:
+        email = player_info.get('user').email.lower()
+    else:
+        email = 'dev@null.com'
 
-def get_kendo_curl(client_id, access_token, amount=100, player_info=''):
-    print(amount)
-
+    if player_info.get('user').phone:
+        phone_number = player_info.get('user').phone
+    else:
+        phone_number = '123123123'
+    
     UNIQUE_ID = str(int(time.time() * 100))
     fname = '.pzkpayu' + UNIQUE_ID
-    order_id = f'pzklic{datetime.datetime.now().year}{player_info}'
-    print(order_id + UNIQUE_ID)
+    order_id = f'pzklic{datetime.datetime.now().year}{player_name}'
 
-    CURLCOM = 'curl -X POST https://secure.snd.payu.com/api/v2_1/orders \\'
-    CURLCOM += '-H "Content-Type: application/json" \\'
-    CURLCOM += '-H "Authorization: Bearer ' + access_token + '" \\'
-    CURLCOM += '''
-    -d '{
+    CURLCOM = f'''curl -X POST https://secure.snd.payu.com/api/v2_1/orders \\
+    -H "Content-Type: application/json" \\
+    -H "Authorization: Bearer {access_token}" \\
+    -d '{{
         "notifyUrl": "http://127.0.0.1:5000",
         "customerIp": "127.0.0.1",
-    '''
-    CURLCOM += '"merchantPosId": ' + client_id + ','
-    CURLCOM += f'''
-        "description": "{order_id+UNIQUE_ID}",
+        "merchantPosId": "{client_id}",
+        "description": "{order_id}",
         "currencyCode": "PLN",
-        "totalAmount": ''' + '"' + str(int(amount * 100)) + '''",
-        '''
-    CURLCOM += '"extOrderId":'
-    CURLCOM += '"' + order_id + UNIQUE_ID + '",'
-    CURLCOM += '''
-    '''
-    CURLCOM += '''
-        "buyer": {
-            "email": "john.doe@example.com",
-            "phone": "654111654",
-            "firstName": "John",
-            "lastName": "Doe",
+        "totalAmount": "{int(amount * 100)}",
+        "extOrderId": "{order_id + UNIQUE_ID}",
+     
+        "buyer": {{
+            "email": "{email}",
+            "phone": "{phone_number}",
+            "firstName": "{first_name}",
+            "lastName": "{last_name}",
             "language": "pl"
-        },
+        }},
+
         "products": [
-            {
+            {{
                 "name": "Licencja",                    
-                "unitPrice": "15000",
+                "unitPrice": "{int(amount * 100)}",
                 "quantity": "1"
-            }
+            }}
         ]
-    '''
-    CURLCOM += "}' > " + fname
+    }}' > {fname}'''
     
     os.system(CURLCOM)
     with open(fname) as f:
@@ -118,7 +126,7 @@ def get_kendo_curl(client_id, access_token, amount=100, player_info=''):
     return j
 
 
-def get_redirect_uri(client_id=None, client_secret=None, amount=100, player_info=''):
+def get_redirect_uri(client_id=None, client_secret=None, amount=100, player_info={}):
     '''
     in case of client_id or client secret empty 
     use LM's sandbox
@@ -132,7 +140,8 @@ def get_redirect_uri(client_id=None, client_secret=None, amount=100, player_info
     response = json.loads(response.content)
     access_token = response["access_token"]
 
-    response = get_kendo_curl(client_id, access_token, amount, player_info)
+    # response = get_kendo_curl(client_id, access_token, amount, player_info)
+    response = pauy_order_curl(client_id, access_token, amount, player_info)
     response = json.loads(response)
     redirect_uri = response["redirectUri"]
     

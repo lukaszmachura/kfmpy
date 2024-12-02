@@ -3,5 +3,7 @@
 {% block title %}LOG{% endblock %}
 
 {% block content %}
-{{ x }}
+    {% for y in x %}
+        <p>{{ y }}</p>
+    {% endfor %}
 {% endblock %}

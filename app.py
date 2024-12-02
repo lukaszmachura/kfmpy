@@ -71,8 +71,11 @@ def home():
 @login_required
 @admin_required
 def see_log():
-    with open('admin.log') as f:
-        x = f.readlines()
+    try:
+        with open('admin.log') as f:
+            x = f.readlines()
+    except:
+        x = ['no log data']
     return render_template('log.html', x=x)
 
 @app.route('/update_app')
@@ -454,5 +457,4 @@ def edit_uplayer():
 
 
 if __name__ == '__main__':
-    # app.run(debug=True)
     app.run()

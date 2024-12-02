@@ -26,13 +26,14 @@
                         <td>{{ u.name }}</td>
                         <td>{{ u.surname }}</td>
                         <td>
-                            {% if u.admin == 1 %}J
-                            {% elif u.admin == 2 %}I
-                            {% elif u.admin == 3 %}I+J
-                            {% elif u.admin == 4 %}K
-                            {% elif u.admin == 5 %}K+J
-                            {% elif u.admin == 6 %}K+I
-                            {% elif u.admin == 7 %}admin
+                            {% if u.admin == 1 %}<button type="button" class="btn btn-danger btn-sm" disabled>J</button>
+                            {% elif u.admin == 2 %}<button type="button" class="btn btn-dark btn-sm" disabled>I</button>
+                            {% elif u.admin == 3 %}<button type="button" class="btn btn-dark btn-sm" disabled>I</button><button type="button" class="btn btn-danger btn-sm" disabled>J</button>
+                            {% elif u.admin == 4 %}<button type="button" class="btn btn-primary btn-sm" disabled>K</button>
+                            {% elif u.admin == 5 %}<button type="button" class="btn btn-primary btn-sm" disabled>K</button><button type="button" class="btn btn-danger btn-sm" disabled>J</button>
+                            {% elif u.admin == 6 %}<button type="button" class="btn btn-primary btn-sm" disabled>K</button><button type="button" class="btn btn-dark btn-sm" disabled>I</button>
+                            {% elif u.admin == 7 %}<button type="button" class="btn btn-primary btn-sm" disabled>K</button><button type="button" class="btn btn-dark btn-sm" disabled>I</button><button type="button" class="btn btn-danger btn-sm" disabled>J</button>
+                            {% elif u.admin == 8 %}<button type="button" class="btn btn-warning btn-sm" disabled>Admin</button>
                             {% endif %}
                         </td>
                         <td>{% if u.parentID is not none %}KIDO!{% endif %}</td>

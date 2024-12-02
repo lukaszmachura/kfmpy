@@ -93,7 +93,8 @@ def pauy_order_curl(client_id, access_token, amount=100, player_info={}):
     -H "Content-Type: application/json" \\
     -H "Authorization: Bearer {access_token}" \\
     -d '{{
-        "notifyUrl": "http://127.0.0.1:5000",
+        "continueUrl": "http://127.0.0.1:5000/continue",
+        "notifyUrl": "http://127.0.0.1:5000/notify",
         "customerIp": "127.0.0.1",
         "merchantPosId": "{client_id}",
         "description": "{order_id}",

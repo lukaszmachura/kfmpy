@@ -360,6 +360,19 @@ def pay_off_licence():
     player = Player.query.filter_by(userID=current_user.id).first()
     return render_template('pay_off_licence.html', player=player, user=current_user, licencje=licencje)
 
+
+@app.route('/continue')
+@login_required
+def payu_continue():
+    return "THANK YOU"
+
+
+@app.route('/notify')
+@login_required
+def payu_notify():
+    print("NOTIFIED")
+    return "NOTIFIED"
+
 ################################################
 
 

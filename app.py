@@ -72,7 +72,7 @@ def home():
 @admin_required
 def see_log():
     with open('admin.log') as f:
-        x = f.read()
+        x = f.readlines()
     return x
 
 @app.route('/update_app')

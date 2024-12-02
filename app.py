@@ -61,11 +61,19 @@ app.jinja_env.filters['dan'] = dan
 app.jinja_env.filters['shogo'] = shogo
 app.jinja_env.filters['ymd'] = ymd
 
+
 # Routes
 @app.route('/')
 def home():
     return render_template('index.html')
 
+@app.route('/log')
+@login_required
+@admin_required
+def see_log():
+    with open('admin.log') as f:
+        x = f.read()
+    return x
 
 @app.route('/update_app')
 @login_required

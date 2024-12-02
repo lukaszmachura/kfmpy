@@ -16,17 +16,17 @@
     <div class="card-body">
         <p>Kwota do opłaty: {{ amount }} zł</p>
         <p>Opłacasz licencje administracyjną (50 PLN ) oraz zawodnicze:</p>
-        <ul></ul>
+        <p>
           {% if 'k' in info[-3:] %}
-          <li>kendo</li>
+          <button type="button" class="btn btn-primary btn-sm" disabled>Kendo</button>
           {% endif %}
           {% if 'i' in info[-3:] %}
-          <li>iaido</li>
+          <button type="button" class="btn btn-dark btn-sm" disabled>Iaido</button>
           {% endif %}
           {% if 'j' in info[-3:] %}
-          <li>jodo</li>
+          <button type="button" class="btn btn-danger btn-sm" disabled>Jodo</button>
           {% endif %}
-        </ul>
+        </p>
         <a href="{{ uri }}" class="btn btn-primary">Opłać licencje</a>
     </div>
   </div>

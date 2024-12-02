@@ -35,7 +35,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="#">
-        <img src="{{ url_for('static', filename='images/pzknav.png') }}" alt="Your Image" class="img-fluid">
+        <img src="{{ url_for('static', filename='images/pzknav.png') }}" alt="Your Image" class="px-3 img-fluid">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -100,21 +100,26 @@
     </div>
 </nav>
 {% if current_user.admin %}
-<nav class="navbar navbar-expand-md navbar-light bg-light mt-0 mb-3">
-<!-- <nav class="navbar navbar-light bg-light"> -->
+<div class="px-3 mx-3">
+    <nav class="navbar navbar-expand-md navbar-light mt-0 mb-3">
+    <!-- <nav class="navbar navbar-light bg-light"> -->
     <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav ms-auto">
         <li class="nav-item px-1"><a class="btn btn-outline-secondary btn" href="#" role="button">
             <i class="fas fa-user-plus"></i> Dodaj użytkownika</a>
         </li>
         {% if current_user.admin == 8 %}
+        <li class="nav-item px-1"><a class="btn btn-outline-secondary btn" href="{{url_for('see_log')}}" role="button">
+            <i class="fas fa-list"></i> Log</a>
+        </li>
         <li class="nav-item px-1"><a class="btn btn-outline-secondary btn" href="{{url_for('update_app')}}" role="button">
             <i class="fas fa-cloud-download-alt"></i> Update</a>
         </li>
         {% endif %}
     </ul>
     </div>
-  </nav>
+    </nav>
+</div>
 {% endif %}
 
 <!-- Main content -->

@@ -411,9 +411,10 @@ def edit_uplayer():
 
         address = str(escape(request.form.get('address'))).strip()
         pesel = str(escape(request.form.get('pesel'))).strip()
-        if not is_valid_pesel(pesel):
-            flash('Niepoprawny PESEL.', 'error')
-            return redirect(url_for('edit_uplayer'))
+        if pesel:
+            if not is_valid_pesel(pesel):
+                flash('Niepoprawny PESEL.', 'error')
+                return redirect(url_for('edit_uplayer'))
 
         if player:
             player.name = name

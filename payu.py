@@ -71,7 +71,8 @@ def get_kendo_curl(client_id, access_token, amount=100, player_info=''):
 
     UNIQUE_ID = str(int(time.time() * 100))
     fname = '.pzkpayu' + UNIQUE_ID
-    order_id = f'pzklic{datetime.datetime.now().year}_{player_info}'
+    order_id = f'pzklic{datetime.datetime.now().year}{player_info}'
+    print(order_id + UNIQUE_ID)
 
     CURLCOM = 'curl -X POST https://secure.snd.payu.com/api/v2_1/orders \\'
     CURLCOM += '-H "Content-Type: application/json" \\'
@@ -88,7 +89,7 @@ def get_kendo_curl(client_id, access_token, amount=100, player_info=''):
         "totalAmount": ''' + '"' + str(int(amount * 100)) + '''",
         '''
     CURLCOM += '"extOrderId":'
-    CURLCOM += '"' + order_id + '",'
+    CURLCOM += '"' + order_id + UNIQUE_ID + '",'
     CURLCOM += '''
     '''
     CURLCOM += '''

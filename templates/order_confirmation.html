@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmation{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h5 class="card-header">
+            {% if order['status'] == 'COMPLETED' %}
+                Dziękujemy za opłacenie licencji
+            {% else %}
+                Oczekujemy na wpłatę
+            {% endif %}
+        </h5>
+        <div class="card-body">
+          <h5 class="card-title">{{ order['buyer']['firstName'] }} {{ order['buyer']['lastName'] }}</h5>
+          <p class="card-text">
+            <dl class="row">
+            
+            <!-- <dt class="col-sm-3">Razem</dt>
+            <dd class="col-sm-9">{{ order['totalAmount'][:-2] }} PLN</dd> -->
+            
+            {% for product in order['products'] %}
+                <dt class="col-sm-3">{{ product['name'] }}</dt>
+                <dd class="col-sm-9">{{ product['unitPrice'][:-2] }} PLN</dd>
+            {% endfor %}
+            
+            <dt class="col-sm-3">Data</dt>
+            <dd class="col-sm-9">{{ order['orderCreateDate'][:10] }}</dd>
+
+            </dl>
+          </p>
+         
+        </div>
+      </div>
+
+
+    <!-- <div class="px-3">
+    {% for key, value in order.items() %}
+        <h6>{{ key }}</h6>
+        <p>{{ value }}</p>
+    {% endfor %}
+    </div> -->
+{% endblock %}

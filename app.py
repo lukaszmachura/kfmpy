@@ -1,17 +1,19 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user 
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Club, Player
+from models import db, User, Club, Player, Licence
 from functools import wraps
-import datetime
 from markupsafe import escape
+
+import datetime
 import subprocess
 import logging
+
 from utils import *
 from kfutils import *
 from jfilters import *
-from pzkconfig import licencje
-from payu import get_redirect_uri
+from pzkconfig import licencje, licence_db_number
+from payu import place_payu_order, get_order_status
 
 
 # logger file
@@ -315,7 +317,7 @@ def players():
 @login_required
 def payment():
     if request.method == 'POST':
-        info = f'_{current_user.name}_{current_user.surname}_'
+        info = 'a'
         hajs = 50
         kendo = request.form.get('licencjaKendo')
         if kendo != None:
@@ -335,7 +337,21 @@ def payment():
             'user': current_user,
             'licences': info
         }
-        payment_uri = get_redirect_uri(amount=hajs, player_info=pinfo)
+        res = place_payu_order(amount=hajs, player_info=pinfo)
+
+        # how to propagate order_id?
+        order = Licence(
+            playerId='1', 
+            userId=current_user.id, 
+            date=datetime.datetime.now(), 
+            licence=licence_db_number(info),
+            orderId=res['orderId']
+        )
+        db.session.add(order)
+        db.session.commit()
+        #
+
+        payment_uri = res['redirectUri']
         return render_template(
             'checkout.html', 
             user=current_user, 
@@ -345,6 +361,7 @@ def payment():
             )  
         
     return redirect(url_for('profile'))
+
 
 @app.route('/licences') #, methods=['GET', 'POST'])
 @login_required
@@ -364,13 +381,37 @@ def pay_off_licence():
 @app.route('/continue')
 @login_required
 def payu_continue():
-    return "THANK YOU"
+    licence = Licence.query.filter_by(userId=current_user.id).order_by(Licence.id.desc()).first()
+    
+    order_id = licence.orderId
+    order = get_order_status(order_id=order_id)
+    order = order['orders'][0]  # we will be placing only 1 order
+
+    # update DB for player licences
+    # only if payment is COMPLETED
+    if order['status'] == 'COMPLETED':
+        date_of_order = order['orderCreateDate'][:10]
+        player = Player.query.filter_by(userID=current_user.id).first()
+
+        for product in order['products']:
+            if product['name'] == 'Kendo':
+                player.kendolicence = set_licence_date(date_of_order)
+            if product['name'] == 'Iaido':
+                player.iaidolicence = set_licence_date(date_of_order)
+            if product['name'] == 'Jodo':
+                player.jodolicence = set_licence_date(date_of_order)
+        db.session.commit()
+
+    return render_template('order_confirmation.html', order=order)
 
 
-@app.route('/notify')
-@login_required
+@app.route('/notify', methods=['POST', 'GET'])  # @login_required
 def payu_notify():
-    print("NOTIFIED")
+    if request.method == 'POST':
+        print("NOTIFIED")
+        print(request.get_data())
+    else:
+        return redirect(url_for('home'))
     return "NOTIFIED"
 
 ################################################

@@ -140,13 +140,15 @@
                         Aby opłacić licencje uzupełnij adres email
                     </a>
                 {% endif %}
+            {% else %}
+                <h5 class="card-title">Licencje zawodnicze</h5>
             {% endif %}
         </h5>
         <div class="card-body">
-          <h5 class="card-title">Licencje zawodnicze</h5>
+          
           <p class="card-text">
             <dl class="row">
-                <dt class="col-sm-3">Kendo</dt>
+                <dt class="col-sm-3">Licencja Kendo</dt>
                 <dd class="col-sm-9">
                     {% if player.kendolicence | is_younger_than_one_year %}
                     Aktywna ({{ player.kendolicence | ymd }})
@@ -155,7 +157,7 @@
                     {% endif %}
                 </dd>
         
-                <dt class="col-sm-3">Iaido</dt>
+                <dt class="col-sm-3">Licencja Iaido</dt>
                 <dd class="col-sm-9">
                     {% if player.iaidolicence | is_younger_than_one_year %}
                     Aktywna ({{ player.iaidolicence | ymd }})
@@ -164,7 +166,7 @@
                     {% endif %}
                 </dd>
         
-                <dt class="col-sm-3">Jodo</dt>
+                <dt class="col-sm-3">Licencja Jodo</dt>
                 <dd class="col-sm-9">
                     {% if player.jodolicence | is_younger_than_one_year %}
                     Aktywna ({{ player.jodolicence | ymd }})

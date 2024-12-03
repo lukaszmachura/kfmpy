@@ -114,10 +114,11 @@ class Club(db.Model):
 class Licence(db.Model):
     '''federation licences model'''
     id = db.Column(db.Integer, primary_key=True)
-    playeriD = db.Column(db.String(10))  # TODO make this Player reference
+    playerId = db.Column(db.String(10))  # TODO make this Player reference
+    userId = db.Column(db.String(10))  # TODO make this User reference
     date = db.Column(db.DateTime)  # date of payment
     licence = db.Column(db.Integer, default=0)
-    paymentID = db.Column(db.String(50))  # copy from PayU (or some other shit)
+    orderId = db.Column(db.String(50))  # copy from PayU (or bank)
     # 0 - honorary member / exempt from fees
     # 1 - jodo
     # 2 - iaido

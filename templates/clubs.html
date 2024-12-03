@@ -16,14 +16,14 @@
                     <th>Miasto</th>
                     <th>Dyscyplina</th>
                     <th>Licencja</th>
-                    {% if current_user.is_authenticated %} 
+                    {% if current_user.is_authenticated %}
+                        <th>Skrót</th>
+                        <th>Kontakt</th>
                         {% 
                             if current_user.admin 
                             or 
                             current_user.leader 
                         %}
-                            <th>Skrót</th>
-                            <th>Kontakt</th>
                             <th>Klucz</th>
                             <th>Historia</th>
                             <th>Akcja</th>
@@ -53,7 +53,8 @@
                             </button>
                         </td>
                         
-                        {% if current_user.is_authenticated %} 
+                        {% if current_user.is_authenticated  %} 
+                        
                             <td>{{ club.abbrev }}</td>
                             <td>{{ club.email }}</td>
                             {% 
@@ -67,7 +68,7 @@
                                 <td>{{ club.licencehistory }}</td>
                                 <td><a type="button" class="btn btn-primary btn-sm">Edytuj</a></td>
                             {% else %}
-                                <td>...</td><td>...</td><td>...</td>
+                                <!-- <td>...</td><td>...</td><td>...</td> -->
                             {% endif %}
                         {% endif %}
                     </tr>

@@ -5,6 +5,7 @@ __pycache__/
 
 # PZK
 .pzk*
+config.py
 
 # Flask
 venv

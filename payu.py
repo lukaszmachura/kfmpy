@@ -3,13 +3,19 @@ import json
 import time, datetime
 import os
 from pzkconfig import licencje
+from config import *
 
 from flask import url_for
 
 
-def get_credentials(client_id="477482", client_secret="fd6ca32d3d2e7466f103167d21df4ccd"):
+def get_credentials(client_id=None, client_secret=None):
     url = "https://secure.snd.payu.com/pl/standard/user/oauth/authorize"
     
+    if client_id == None or client_secret == None:
+        # read credentials from config file
+        client_id = SAND_CLIENT_ID  # LM's sandbox
+        client_secret = SAND_CLIENT_SECRET
+
     params = {
         'grant_type': 'client_credentials',
         'client_id': client_id,
@@ -47,8 +53,9 @@ def get_order_status(client_id=None, client_secret=None, order_id=None):
     '''
 
     if client_id == None or client_secret == None:
-        client_id = "477482"  # LM's sandbox
-        client_secret = "fd6ca32d3d2e7466f103167d21df4ccd"
+        # read credentials from config file
+        client_id = SAND_CLIENT_ID  # LM's sandbox
+        client_secret = SAND_CLIENT_SECRET
 
     response = get_credentials(client_id, client_secret)
     response = json.loads(response.content)
@@ -231,8 +238,9 @@ def place_payu_order(client_id=None, client_secret=None, amount=100, player_info
     '''
 
     if client_id == None or client_secret == None:
-        client_id = "477482"  # LM's sandbox
-        client_secret = "fd6ca32d3d2e7466f103167d21df4ccd"
+        # read credentials from config file
+        client_id = SAND_CLIENT_ID  # LM's sandbox
+        client_secret = SAND_CLIENT_SECRET
 
     response = get_credentials(client_id, client_secret)
     response = json.loads(response.content)

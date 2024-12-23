@@ -81,6 +81,8 @@ class Player(db.Model):
     jodolicence = db.Column(db.DateTime)
     jodolicencehistory = db.Column(db.String(200))
 
+    adminlicence = db.Column(db.DateTime)
+
     leader = db.Column(db.Boolean, default=False)
 
     playeriD = db.Column(db.String(10))
@@ -118,6 +120,8 @@ class Licence(db.Model):
     userId = db.Column(db.String(10))  # TODO make this User reference
     date = db.Column(db.DateTime)  # date of payment
     licence = db.Column(db.Integer, default=0)
+    licencePlayer = db.Column(db.Integer, default=0)
+    licenceInstructor = db.Column(db.Integer, default=0)
     orderId = db.Column(db.String(50))  # copy from PayU (or bank)
     # 0 - honorary member / exempt from fees
     # 1 - jodo
@@ -127,11 +131,3 @@ class Licence(db.Model):
     # 5 - 1 + 4 - kendo + jodo
     # 6 - 2 + 4 - kendo + iaido
     # 7 - 1 + 2 + 4 - kendo + iaido + jodo
-    # 8 - instructor
-    # 9 = 8 + 1 - instructor jodo
-    # 10 = 8 + 2 - instructor iaido
-    # 11 = 8 + 1 + 2 - - instructor jodo + iaido
-    # 12 = 8 + 4 - instructor kendo
-    # 13 = 8 + 1 + 4 - instructor jodo + kendo
-    # 14 = 8 + 2 + 4 - instructor iaido + kendo
-    # 15 = 8 + 1 + 2 + 4 - instructor jodo + iaido + kendo 

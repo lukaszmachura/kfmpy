@@ -1,0 +1,12 @@
+####################################
+# replace with actual data
+# remove _conf from the filename
+####################################
+
+# sandbox data
+SAND_CLIENT_ID = "123456"
+SAND_CLIENT_SECRET = "sand_client_secret"
+
+# life PayU data
+CLIENT_ID = "123456"
+CLIENT_SECRET = "payu_client_secret"

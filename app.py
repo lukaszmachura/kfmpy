@@ -404,11 +404,12 @@ def payu_continue():
         
         db.session.commit()
     else:
-        # else: do 5x (wait 5secs and call get_order_status)
-        # after that -> give up
-        for _ in range(5):
-            sleep(5)
-            return redirect(url_for('payu_continue'))
+        # TODO: else: do 5x (wait 5secs and call get_order_status)
+        #             after that -> give up
+        # for _ in range(5):
+        #     sleep(5)
+        #     return redirect(url_for('payu_continue'))
+        pass
 
     # order confirmation will present 
     # COMPLETED or WAITING message

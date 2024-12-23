@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Club, Player, Licence
 from functools import wraps
 from markupsafe import escape
+from time import sleep
 
 import datetime
 import subprocess
@@ -400,8 +401,17 @@ def payu_continue():
                 player.iaidolicence = set_licence_date(date_of_order)
             if product['name'] == 'Jodo':
                 player.jodolicence = set_licence_date(date_of_order)
+        
         db.session.commit()
+    else:
+        # else: do 5x (wait 5secs and call get_order_status)
+        # after that -> give up
+        for _ in range(5):
+            sleep(5)
+            return redirect(url_for('payu_continue'))
 
+    # order confirmation will present 
+    # COMPLETED or WAITING message
     return render_template('order_confirmation.html', order=order)
 
 
@@ -423,19 +433,24 @@ def payu_notify():
 def edit_player(id):
     player = Player.query.get_or_404(id)
     if request.method == 'POST':
-        player.kendo = grade_from_form(request.form.get('newKendo'))
-        player.iaido = grade_from_form(request.form.get('newIaido'))
-        player.jodo = grade_from_form(request.form.get('newJodo'))
 
-        player.kendolicence = set_licence_date(request.form.get('kendolicence'))
-        player.iaidolicence = set_licence_date(request.form.get('iaidolicence'))
-        player.jodolicence = set_licence_date(request.form.get('jodolicence'))
+        if current_user.admin >= 4:
+            player.kendo = grade_from_form(request.form.get('newKendo'))
+            player.kendolicence = set_licence_date(request.form.get('kendolicence'))
+            player.kendoshogo = set_shogo(player, request.form.get('kendoshogo'), 'kendo')
+
+        if current_user.admin in [2, 3, 6, 7, 8]:
+            player.iaido = grade_from_form(request.form.get('newIaido'))
+            player.iaidolicence = set_licence_date(request.form.get('iaidolicence'))
+            player.iaidoshogo = set_shogo(player, request.form.get('iaidoshogo'), 'iaido')
+
+        if current_user.admin in [1, 3, 5, 7, 8]:
+            player.jodo = grade_from_form(request.form.get('newJodo'))
+            player.jodolicence = set_licence_date(request.form.get('jodolicence'))
+            player.jodoshogo = set_shogo(player, request.form.get('jodoshogo'), 'jodo')
+        
         player.licence = kf_licence(player)
-
-        player.kendoshogo = set_shogo(player, request.form.get('kendoshogo'), 'kendo')
-        player.iaidoshogo = set_shogo(player, request.form.get('iaidoshogo'), 'iaido')
-        player.jodoshogo = set_shogo(player, request.form.get('jodoshogo'), 'jodo')
-            
+    
         db.session.commit()
         return redirect(url_for('players'))
     return "404"  #redirect(url_for('players'))  #render_template('players.html', items=Player.query.all())
